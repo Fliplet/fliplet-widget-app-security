@@ -1,0 +1,63 @@
+<div class="container-fluid">
+  <h3>App security</h3>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <div class="col-sm-4 control-label">
+        <label for="sso_logout_url">Rule name</label>
+      </div>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="name" placeholder="My SAML2 hook" required/>
+        <h6>A unique identifier name for your rule .</h6>
+      </div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-sm-4 control-label">
+        <label for="filterType">Filter type</label>
+      </div>
+      <div class="col-sm-8">
+        <label for="filterType" class="select-proxy-display">
+          <span class="icon fa fa-chevron-down"></span>
+          <span class="select-value-proxy">Select a type</span>
+          <select id="filterType" data-label="select" class="hidden-select form-control" required>
+            <option value="blacklist">&mdash; Blacklist &mdash;</option>
+            <option value="whitelist">&mdash; Whitelist &mdash;</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-sm-4 control-label">
+        <label for="requirement">Requirement</label>
+      </div>
+      <div class="col-sm-8">
+        <label for="requirement" class="select-proxy-display">
+          <span class="icon fa fa-chevron-down"></span>
+          <span class="select-value-proxy">Select a type</span>
+          <select id="requirement" data-label="select" class="hidden-select form-control" required>
+            <option value="saml2">&mdash; SAML2 &mdash;</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <div class="col-sm-4 control-label">
+        <label for="pages">Pages</label>
+      </div>
+      <div class="col-sm-8" id="pages">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-4 control-label">
+        <label for="sso_logout_url">Error message</label>
+      </div>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="errorMessage" value="{{errrorMessage}}" required/>
+        <h6>An error message to present to the user when the hook is rejecting.</h6>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,32 @@
+{
+  "name": "App Security",
+  "package": "com.fliplet.app-security",
+  "version": "1.0.0",
+  "icon": "img/icon.png",
+  "tags": ["type:appComponent"],
+  "provider_only": false,
+  "references": [
+    "pages.$.id:page"
+  ],
+  "html_tag": "div",
+  "interface": {
+    "dependencies": [
+      "fliplet-core",
+      "fliplet-studio-ui",
+      "handlebars",
+      "bootstrap-select"
+    ],
+    "assets": [
+      "js/interface.js",
+      "js/interface.templates.js"
+    ]
+  },
+  "build": {
+    "dependencies": [
+      "fliplet-core"
+    ],
+    "assets": [
+      "js/build.js"
+    ]
+  }
+}
