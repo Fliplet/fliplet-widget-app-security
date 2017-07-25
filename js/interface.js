@@ -80,6 +80,8 @@ Fliplet().then(function () {
   Fliplet.Widget.onSaveRequest(function () {
     $('form').submit();
   });
+
+  Fliplet.Widget.autosize();
 });
 
 function compile(hook) {
@@ -95,5 +97,3 @@ function updateSelectText($el) {
 $('#filterType, #requirement').on('change', function () {
   updateSelectText($(this));
 });
-
-Fliplet.Widget.autosize;
