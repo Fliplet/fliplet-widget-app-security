@@ -86,7 +86,7 @@ Fliplet().then(function () {
 
 function compile(hook) {
   var comparison = hook.filterType === 'whitelist' ? '>' : '===';
-  return 'if ([' + hook.pages + '].indexOf(page.id) ' + comparison + ' -1 && !session.passports.' + hook.requirement + ') { error = "' + hook.errorMessage + '"}';
+  return 'if ([' + hook.pages + '].indexOf(page.id) ' + comparison + ' -1 && (!session || !session.passports.' + hook.requirement + ')) { error = "' + hook.errorMessage + '"}';
 }
 
 function updateSelectText($el) {
