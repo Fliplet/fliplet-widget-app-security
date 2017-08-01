@@ -64,7 +64,7 @@ Fliplet().then(function () {
       Fliplet.Widget.save(data).then(function () {
         return Promise.all(Object.keys(data.hooks).map(function (name) {
           var script = compile(data.hooks[name]);
-          return Fliplet.App.Hooks.set(name, { script: script, run: 'beforePageView' });
+          return Fliplet.App.Hooks.set(name, { script: script, run: ['beforePageView'] });
         }))   
       })
       .then(function () {
