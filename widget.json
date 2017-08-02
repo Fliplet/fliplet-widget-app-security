@@ -17,6 +17,7 @@
       "bootstrap-select"
     ],
     "assets": [
+      "css/interface.css",
       "js/interface.js",
       "js/interface.templates.js"
     ]

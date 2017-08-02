@@ -7,7 +7,8 @@ var rule = {
   pages: [],
   filterType: null,
   requirement: null,
-  errorMessage: null
+  errorMessage: null,
+  onErrorAction: null
 };
 
 // Preload data
@@ -19,7 +20,22 @@ if (hooksNames.length) {
   $('#filterType').val(rule.filterType);
   $('#requirement').val(rule.requirement);
   $('#errorMessage').val(rule.errorMessage);
-} 
+}
+
+rule.onErrorAction = rule.onErrorAction || {};
+rule.onErrorAction.action = 'screen';
+rule.onErrorAction.options = { hideAction: true };
+
+var onErrorActionProvider = Fliplet.Widget.open('com.fliplet.link', {
+  selector: '#onErrorAction',
+  data: rule.onErrorAction
+});
+
+onErrorActionProvider.then(function (result) {
+  rule.onErrorAction = result && result.data;
+  $('form').submit();
+})
+
 updateSelectText($('#requirement'));
 updateSelectText($('#filterType'));
 
@@ -33,7 +49,7 @@ Fliplet().then(function () {
     $('#pages').html(pagesHtml);
     $('.selectpicker').selectpicker('render');
   });
-  
+
   $('form').submit(function (event) {
     event.preventDefault();
 
@@ -50,7 +66,7 @@ Fliplet().then(function () {
       $.each($(".selectpicker option:selected"), function() {
         pages.push(Number($(this).val()));
       });
-      
+
       // TODO: We are setting only one for now
       var hookName = $('#name').val() || 'My Hook ' + (new Date()).getTime().toString().substring(9);
       $('#name').val(hookName);
@@ -58,14 +74,16 @@ Fliplet().then(function () {
         filterType: $('#filterType').val(),
         requirement: $('#requirement').val(),
         errorMessage: $('#errorMessage').val(),
+        onErrorAction: rule && rule.onErrorAction || null,
         pages: pages
       };
 
       Fliplet.Widget.save(data).then(function () {
         return Promise.all(Object.keys(data.hooks).map(function (name) {
           var script = compile(data.hooks[name]);
+          console.log('saving', script)
           return Fliplet.App.Hooks.set(name, { script: script, run: ['beforePageView'] });
-        }))   
+        }))
       })
       .then(function () {
         Fliplet.Widget.complete();
@@ -78,7 +96,7 @@ Fliplet().then(function () {
 
   // Fired from Fliplet Studio when the external save button is clicked
   Fliplet.Widget.onSaveRequest(function () {
-    $('form').submit();
+    onErrorActionProvider.forwardSaveRequest();
   });
 
   Fliplet.Widget.autosize();
@@ -86,7 +104,15 @@ Fliplet().then(function () {
 
 function compile(hook) {
   var comparison = hook.filterType === 'whitelist' ? '>' : '===';
-  return 'if ([' + hook.pages + '].indexOf(page.id) ' + comparison + ' -1 && (!session || !session.passports.' + hook.requirement + ')) { error = "' + hook.errorMessage + '"}';
+  return [
+    'if ([' + hook.pages + '].indexOf(page.id) ' + comparison + ' -1 && ',
+    '(!session || !session.passports.' + hook.requirement + '))',
+    '{',
+      'error = "' + hook.errorMessage + '";',
+      'action = ' + (hook.onErrorAction.action ? '"' + hook.onErrorAction.action + '"' : 'null') + ';',
+      'payload = ' + (hook.onErrorAction.page ? '{ pageId: ' + hook.onErrorAction.page + ' }' : 'null') + ';',
+    '}'
+  ].join('');
 }
 
 function updateSelectText($el) {
