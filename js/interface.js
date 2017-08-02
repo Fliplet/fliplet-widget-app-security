@@ -22,9 +22,13 @@ if (hooksNames.length) {
   $('#errorMessage').val(rule.errorMessage);
 }
 
+rule.onErrorAction = rule.onErrorAction || {};
+rule.onErrorAction.action = 'screen';
+rule.onErrorAction.options = { hideAction: true };
+
 var onErrorActionProvider = Fliplet.Widget.open('com.fliplet.link', {
   selector: '#onErrorAction',
-  data: rule && rule.onErrorAction || {}
+  data: rule.onErrorAction
 });
 
 onErrorActionProvider.then(function (result) {
@@ -77,6 +81,7 @@ Fliplet().then(function () {
       Fliplet.Widget.save(data).then(function () {
         return Promise.all(Object.keys(data.hooks).map(function (name) {
           var script = compile(data.hooks[name]);
+          console.log('saving', script)
           return Fliplet.App.Hooks.set(name, { script: script, run: ['beforePageView'] });
         }))
       })
@@ -99,7 +104,15 @@ Fliplet().then(function () {
 
 function compile(hook) {
   var comparison = hook.filterType === 'whitelist' ? '>' : '===';
-  return 'if ([' + hook.pages + '].indexOf(page.id) ' + comparison + ' -1 && (!session || !session.passports.' + hook.requirement + ')) { error = "' + hook.errorMessage + '"}';
+  return [
+    'if ([' + hook.pages + '].indexOf(page.id) ' + comparison + ' -1 && ',
+    '(!session || !session.passports.' + hook.requirement + '))',
+    '{',
+      'error = "' + hook.errorMessage + '";',
+      'action = ' + (hook.onErrorAction.action ? '"' + hook.onErrorAction.action + '"' : 'null') + ';',
+      'payload = ' + (hook.onErrorAction.page ? '{ pageId: ' + hook.onErrorAction.page + ' }' : 'null') + ';',
+    '}'
+  ].join('');
 }
 
 function updateSelectText($el) {
