@@ -106,7 +106,7 @@ function compile(hook) {
   var comparison = hook.filterType === 'whitelist' ? '>' : '===';
   return [
     'if ([' + hook.pages + '].indexOf(page.id) ' + comparison + ' -1 && ',
-    '(!session || !session.passports.' + hook.requirement + '))',
+    '(!session || !session.server.passports.' + hook.requirement + '))',
     '{',
       'error = "' + hook.errorMessage + '";',
       'action = ' + (hook.onErrorAction.action ? '"' + hook.onErrorAction.action + '"' : 'null') + ';',
