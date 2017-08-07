@@ -1,1 +1,5 @@
-<input type="text" class="form-control" id="tokenfield" value="" />
+<select class="selectpicker" data-width="auto" multiple>
+  {{#each pages}}
+    <option {{#if selected }} selected {{/if}} value="{{ id }}">{{ title }}</option>
+  {{/each}}
+</select>
