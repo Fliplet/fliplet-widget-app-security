@@ -1,21 +1,5 @@
-// Selectors
 var $accordionContainer = $('#accordion');
-
-// TODO: For now we will pick just the first hook
-var rule = {
-  hooks: {},
-  pages: [],
-  filterType: null,
-  requirement: null,
-  errorMessage: null,
-  onErrorAction: null
-};
-
-updateSelectText($('[data-name="requirement"]'));
-updateSelectText($('[data-name="filterType"]'));
-updateSelectText($('[data-name="hookType"]'));
-
-var i = 1; // Just a counter to have a simple unique id for each hook when rendering the template.
+var hookTemplateId = 1; // Just a counter to have a simple unique id for each hook when rendering the template.
 var onErrorActionProviders = {};
 var hooks;
 var pages;
@@ -51,9 +35,9 @@ Fliplet().then(function () {
 function addHookItem(settings) {
   settings = settings || {};
   settings.pages = settings.pages || pages;
-  i = i + 1;
+  hookTemplateId += 1;
   var extraContext = {
-    id: i,
+    id: hookTemplateId,
     beforeDataSourceQuery: settings.hookType === 'beforeDataSourceQuery',
     beforePageView: settings.hookType === 'beforePageView',
     whitelist: settings.filterType === 'whitelist',
@@ -65,39 +49,17 @@ function addHookItem(settings) {
   var context = $.extend({}, settings, extraContext);
   var $hook = $(Fliplet.Widget.Templates['templates.hook'](context));
   $accordionContainer.append($hook);
+  $hook.find('.hidden-select').change();
+  $hook.find('.selectpicker').selectpicker('render');
   
   settings.onErrorAction = settings.onErrorAction || {};
   settings.onErrorAction.action = 'screen';
   settings.onErrorAction.options = { hideAction: true };
-  onErrorActionProviders[i] = Fliplet.Widget.open('com.fliplet.link', {
-    selector: '#accordion [data-id=' + i + '] .onErrorAction',
+  onErrorActionProviders[hookTemplateId] = Fliplet.Widget.open('com.fliplet.link', {
+    selector: '#accordion [data-id=' + hookTemplateId + '] .onErrorAction',
     data: settings.onErrorAction
   });
-
-  updateSelectText($hook.find('[data-name="requirement"]'));
-  updateSelectText($hook.find('[data-name="filterType"]'));
-  updateSelectText($hook.find('[data-name="hookType"]'));
-  $('.selectpicker').selectpicker('render');
 }
-
-function updateSelectText($el) {
-  var selectedText = $el.find('option:selected').text();
-  $el.parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
-}
-
-$('#filterType, #requirement, #hookType').on('change', function () {
-  updateSelectText($(this));
-});
-
-$('[data-name="filterType"]').on('change', function () {
-
-});
-
-$('[data-name="requirement"]').on('change', function () {
-  if ($(this).val() === 'custom') {
-    $('[data-name="customCondition"]').show();
-  }
-});
 
 // Listeners
 $accordionContainer
@@ -110,15 +72,15 @@ $accordionContainer
   })
   .on('show.bs.collapse', '.panel-collapse', function() {
     $(this).siblings('.panel-heading').find('.fa-chevron-right').removeClass('fa-chevron-right').addClass('fa-chevron-down');
-    Fliplet.Widget.autosize
+    Fliplet.Widget.autosize();
   })
   .on('hide.bs.collapse', '.panel-collapse', function() {
     $(this).siblings('.panel-heading').find('.fa-chevron-down').removeClass('fa-chevron-down').addClass('fa-chevron-right');
-    Fliplet.Widget.autosize
+    Fliplet.Widget.autosize();
   })
   .on('shown.bs.collapse hidden.bs.collapse', '.panel-collapse', function() {
     $('.tab-content').trigger('scroll');
-    Fliplet.Widget.autosize
+    Fliplet.Widget.autosize();
   })
   .on('change', '[data-name="hookType"]', function () {
     if ($(this).val() === 'beforePageView') {
@@ -129,6 +91,7 @@ $accordionContainer
       $(this).closest('.panel').find('.filter-type').hide();
       $(this).closest('.panel').find('.pages').hide();
     }
+    updateSelectText(this);
   })
   .on('change', '[data-name="requirement"]', function () {
     if ($(this).val() === 'custom') {
@@ -136,7 +99,17 @@ $accordionContainer
     } else {
       $(this).closest('.panel').find('.custom-condition').hide();
     }
+    updateSelectText(this);
+  })
+  .on('change', '[data-name="filterType"]', function () {
+    updateSelectText(this);
   });
+
+function updateSelectText(el) {
+  var selectedText = $(el).find('option:selected').text();
+  $(el).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
+};
+
   
 $('.expand-items').on('click', function() {
   var $panelCollapse = $('.panel-collapse.in');
@@ -201,17 +174,16 @@ Fliplet.Widget.onSaveRequest(function() {
     });
   });
 
-  Promise.all(Object.keys(onErrorActionProviders).map(function(id) {
+  Object.keys(onErrorActionProviders).map(function(id) {
     return onErrorActionProviders[id].forwardSaveRequest();
-  }))
-  .then(function () {
-    return Fliplet.API.request({
-      url: 'v1/apps/' + Fliplet.Env.get('appId'),
-      method: 'PUT',
-      data: {
-        hooks: newHooks
-      }
-    });
+  })
+
+  return Fliplet.API.request({
+    url: 'v1/apps/' + Fliplet.Env.get('appId'),
+    method: 'PUT',
+    data: {
+      hooks: newHooks
+    }
   });
 });
 
