@@ -157,9 +157,7 @@ function collapseAccordion() {
 }
 
 $('.new-hook').on('click', function() {
-  data = {};
-  data.number = (new Date()).getTime().toString().substring(9);
-  addHookItem(data);
+  addHookItem();
 });
 
 Fliplet.Widget.onSaveRequest(function() {
@@ -175,8 +173,7 @@ Fliplet.Widget.onSaveRequest(function() {
       pages.push(Number($(this).val()));
     });
 
-    var hookName = $(this).find('[data-name=hookName]').val() || 'Rule ' + (new Date()).getTime().toString().substring(9);
-    $(this).find('[data-name=hookName]').val(hookName);
+    var hookName = 'Rule ' + (new Date()).getTime().toString().substring(9);
     newHooks[hookName] = {};
     newHooks[hookName].settings = {
       name: hookName,
