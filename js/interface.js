@@ -4,12 +4,17 @@ var onErrorActionProviders = {};
 var hooks;
 var pages;
 var accordionCollapsed;
+var panelItems = 0;
 
-Fliplet().then(function () {
+if (panelItems > 0) {
+  $('.expand-items').addClass('show');
+}
+
+Fliplet().then(function() {
   Promise.all([
-    Fliplet.App.Hooks.get(),
-    Fliplet.Pages.get()
-  ])
+      Fliplet.App.Hooks.get(),
+      Fliplet.Pages.get()
+    ])
     .then(function(values) {
       hooks = values[0];
       pages = values[1];
@@ -51,14 +56,21 @@ function addHookItem(settings) {
   $accordionContainer.append($hook);
   $hook.find('.hidden-select').change();
   $hook.find('.selectpicker').selectpicker('render');
-  
+
   settings.onErrorAction = settings.onErrorAction || {};
   settings.onErrorAction.action = 'screen';
-  settings.onErrorAction.options = { hideAction: true };
+  settings.onErrorAction.options = {
+    hideAction: true
+  };
   onErrorActionProviders[hookTemplateId] = Fliplet.Widget.open('com.fliplet.link', {
     selector: '#accordion [data-id=' + hookTemplateId + '] .onErrorAction',
     data: settings.onErrorAction
   });
+
+  panelItems = $('.panel').length;
+  if (panelItems > 0) {
+    $('.expand-items').addClass('show');
+  }
 }
 
 // Listeners
@@ -66,6 +78,13 @@ $accordionContainer
   .on('click', '.icon-delete', function() {
     var $item = $(this).closest("[data-id], .panel");
     $item.remove();
+
+    panelItems = $('.panel').length;
+    if (panelItems > 0) {
+      $('.expand-items').addClass('show');
+    } else {
+      $('.expand-items').removeClass('show');
+    }
   })
   .on('keyup change paste', '[data-name="hookName"]', function() {
     $(this).parents('.panel').find('.panel-title-text').html(this.value);
@@ -82,7 +101,7 @@ $accordionContainer
     $('.tab-content').trigger('scroll');
     Fliplet.Widget.autosize();
   })
-  .on('change', '[data-name="hookType"]', function () {
+  .on('change', '[data-name="hookType"]', function() {
     if ($(this).val() === 'beforePageView') {
       $(this).closest('.panel').find('.filter-type').show();
       $(this).closest('.panel').find('.pages').show();
@@ -93,7 +112,7 @@ $accordionContainer
     }
     updateSelectText(this);
   })
-  .on('change', '[data-name="requirement"]', function () {
+  .on('change', '[data-name="requirement"]', function() {
     if ($(this).val() === 'custom') {
       $(this).closest('.panel').find('.custom-condition').show();
     } else {
@@ -101,7 +120,7 @@ $accordionContainer
     }
     updateSelectText(this);
   })
-  .on('change', '[data-name="filterType"]', function () {
+  .on('change', '[data-name="filterType"]', function() {
     updateSelectText(this);
   });
 
@@ -110,7 +129,7 @@ function updateSelectText(el) {
   $(el).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 };
 
-  
+
 $('.expand-items').on('click', function() {
   var $panelCollapse = $('.panel-collapse.in');
   // Update accordionCollapsed if all panels are collapsed/expanded
@@ -137,24 +156,26 @@ function collapseAccordion() {
   $('.panel-collapse').collapse('hide');
 }
 
-  $('.new-hook').on('click', function() {
-    addHookItem();
-  });
+$('.new-hook').on('click', function() {
+  data = {};
+  data.number = (new Date()).getTime().toString().substring(9);
+  addHookItem(data);
+});
 
 Fliplet.Widget.onSaveRequest(function() {
   var newHooks = {};
-  
+
   // Create a hook for each panel
   $('[data-id]').each(function() {
     var id = $(this).data('id');
 
     // Get selected pages
-    var pages =[];
+    var pages = [];
     $.each($(this).find(".selectpicker option:selected"), function() {
       pages.push(Number($(this).val()));
     });
 
-    var hookName = $(this).find('[data-name=hookName]').val() || 'My Hook ' + (new Date()).getTime().toString().substring(9);
+    var hookName = $(this).find('[data-name=hookName]').val() || 'Rule ' + (new Date()).getTime().toString().substring(9);
     $(this).find('[data-name=hookName]').val(hookName);
     newHooks[hookName] = {};
     newHooks[hookName].settings = {
@@ -167,8 +188,8 @@ Fliplet.Widget.onSaveRequest(function() {
       pages: pages
     };
     newHooks[hookName].run = [$(this).find('#filterType').val()];
-    
-    onErrorActionProviders[id].then(function (result) {
+
+    onErrorActionProviders[id].then(function(result) {
       newHooks[hookName].settings.onErrorAction = result && result.data;
       newHooks[hookName].script = compile(newHooks[hookName].settings);
     });
@@ -189,7 +210,7 @@ Fliplet.Widget.onSaveRequest(function() {
 
 /**
  * Given settings this creates a script that will run on the set hook.
- * @param {Object} hook 
+ * @param {Object} hook
  */
 function compile(hook) {
   if (hook.hookType === 'beforePageView') {
@@ -200,9 +221,9 @@ function compile(hook) {
       hook.customCondition ? ' && ' + hook.customCondition : '',
       ')',
       '{',
-        'error = "' + hook.errorMessage + '";',
-        'action = ' + (hook.onErrorAction.action ? '"' + hook.onErrorAction.action + '"' : 'null') + ';',
-        'payload = ' + (hook.onErrorAction.page ? '{ pageId: ' + hook.onErrorAction.page + ' }' : 'null') + ';',
+      'error = "' + hook.errorMessage + '";',
+      'action = ' + (hook.onErrorAction.action ? '"' + hook.onErrorAction.action + '"' : 'null') + ';',
+      'payload = ' + (hook.onErrorAction.page ? '{ pageId: ' + hook.onErrorAction.page + ' }' : 'null') + ';',
       '}'
     ].join('');
   }
@@ -216,14 +237,14 @@ function compile(hook) {
       // Also add custom condition if set even with a passport requirement
       if (hook.customCondition) {
         condition = condition + ' && ' + hook.customCondition
-      } 
+      }
     }
-    
+
     return [
       'if (' + condition + ')',
       '{',
-        'error = "' + hook.errorMessage || 'Secured query' + '";',
+      'error = "' + hook.errorMessage || 'Secured query' + '";',
       '}'
     ].join('');
-  } 
+  }
 }

@@ -31,7 +31,7 @@
   border-color: #d3dbde;
 }
 
-.panel-default > .panel-heading {
+.panel-default>.panel-heading {
   background-color: #e4e9eb;
   border-color: #d3dbde;
   border-radius: 0;
@@ -43,12 +43,11 @@
 }
 
 .panel-heading:hover {
-  cursor: -webkit-grab;
-  cursor: -moz-grab;
+  cursor: pointer;
 }
 
 .panel-heading h4 {
-  padding: 10px 40px 10px 6px;
+  padding: 10px 40px 10px 15px;
 }
 
 .panel-heading .fa-chevron-down,
@@ -118,14 +117,6 @@
   display: block;
 }
 
-.list-items-empty .panels-empty {
-  display: block;
-}
-
-.list-items-empty #accordion {
-  display: none;
-}
-
 .controls {
   opacity: 1;
   text-align: center;
@@ -139,7 +130,7 @@
   font-size: 0.9em;
 }
 
-.list-items-empty .controls .expand-items {
+.controls .expand-items {
   display: none;
 }
 
@@ -147,24 +138,72 @@
   opacity: 0;
 }
 
-.controls-sticky {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: 0;
-  background: rgba(255, 255, 255, 0.9);
-  border-top: #e6e6e6 1px solid;
-  padding: 10px 15px 0;
-  z-index: 10;
-}
-
 .controls-sticky-on .controls {
   visibility: hidden;
 }
 
-.controls-sticky-on .controls-sticky {
-  visibility: visible;
-  display: block;
+.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+  width: 100%;
+}
+
+.bootstrap-select .btn-default {
+  width: 100%;
+  padding: 0px 12px;
+  background: #fff;
+  border: 1px solid #e4e9eb;
+  border-radius: 6px;
+  font-weight: 400;
+  line-height: 44px;
+  color: #333;
+}
+
+.bootstrap-select.btn-group.show-tick .dropdown-menu li.selected a span.check-mark {
+  color: #00abd1;
+}
+
+.bootstrap-select .bs-caret {
+  position: absolute;
+  background: #00abd1;
+  width: 44px;
+  top: -1px;
+  right: -1px;
+  bottom: -1px;
+  background-color: #00abd1;
+  text-align: center;
+  line-height: 44px;
+  font-size: 18px;
+  color: #FFF;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-left: 1px solid #e4e9eb;
+}
+
+.bootstrap-select.btn-group .dropdown-toggle .caret {
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  margin-top: -22px;
+  right: 0;
+}
+
+.bootstrap-select .bs-caret .caret {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  vertical-align: initial;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+}
+
+.bootstrap-select .bs-caret .caret:before {
+  content: "\f078";
+}
+
+.bootstrap-select .dropdown-toggle:focus {
+  outline: none !important;
+  ;
 }

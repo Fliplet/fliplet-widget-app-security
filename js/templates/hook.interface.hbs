@@ -1,11 +1,8 @@
 <div class="panel panel-default" data-id="{{id}}">
   <div class="panel-heading ui-sortable-handle">
     <h4 class="panel-title" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{id}}">
-      <div class="screen-reorder-handle">
-        <i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i>
-      </div>
       <span class="fa fa-chevron-right"></span>
-      <span class="panel-title-text">{{~name~}}</span>
+      <span class="panel-title-text">{{#if name}}{{name}}{{else}}Rule {{number}}{{/if}}</span>
     </h4>
     <a href="#"><span class="icon-delete fa fa-trash"></span></a>
   </div>
@@ -16,10 +13,10 @@
       <div class="form-group">
         <div class="col-sm-4 control-label">
           <label for="sso_logout_url">Rule name</label>
+          <p class="help-block"><small>A unique name for your rule.</small></p>
         </div>
         <div class="col-sm-8">
-          <input data-name="hookName" type="text" class="form-control" placeholder="My hook name" value="{{ name }}" required/>
-          <h6>A unique identifier name for your rule .</h6>
+          <input data-name="hookName" type="text" class="form-control" placeholder="Enter a hook name" value="{{#if name}}{{ name }}{{else}}Rule {{number}}{{/if}}" required/>
         </div>
       </div>
 
@@ -32,8 +29,9 @@
             <span class="icon fa fa-chevron-down"></span>
             <span class="select-value-proxy">Select a type</span>
             <select data-name="hookType" data-label="select" class="hidden-select form-control" required>
-              <option value="beforePageView" {{#if beforePageView}}selected {{/if}}>&mdash; Before page view &mdash;</option>
-              <option value="beforeDataSourceQuery" {{#if beforeDataSourceQuery}}selected {{/if}}>&mdash; Before data source query &mdash;</option>
+              <option value="">-- Select a type</option>
+              <option value="beforePageView" {{#if beforePageView}}selected {{/if}}>Before page view</option>
+              <option value="beforeDataSourceQuery" {{#if beforeDataSourceQuery}}selected {{/if}}>Before data source query</option>
             </select>
           </label>
         </div>
@@ -46,10 +44,11 @@
         <div class="col-sm-8">
           <label for="filterType" class="select-proxy-display">
             <span class="icon fa fa-chevron-down"></span>
-            <span class="select-value-proxy">Select a type</span>
+            <span class="select-value-proxy">-- Select a type</span>
             <select data-name="filterType" data-label="select" class="hidden-select form-control" required>
-              <option value="blacklist" {{#if blacklist}}selected {{/if}}>&mdash; Blacklist &mdash;</option>
-              <option value="whitelist" {{#if whitelist}}selected {{/if}}>&mdash; Whitelist &mdash;</option>
+              <option value="">-- Select a type</option>
+              <option value="blacklist" {{#if blacklist}}selected {{/if}}>Blacklist</option>
+              <option value="whitelist" {{#if whitelist}}selected {{/if}}>Whitelist</option>
             </select>
           </label>
         </div>
@@ -57,10 +56,10 @@
 
       <div class="form-group clearfix pages">
         <div class="col-sm-4 control-label">
-          <label for="pages">Pages</label>
+          <label for="pages">App screens</label>
         </div>
         <div class="col-sm-8">
-          <select class="selectpicker" data-width="auto" multiple>
+          <select class="selectpicker" multiple>
             {{#each pages}}
               <option {{#if selected }} selected {{/if}} value="{{ id }}">{{ title }}</option>
             {{/each}}
@@ -75,11 +74,12 @@
         <div class="col-sm-8">
           <label for="requirement" class="select-proxy-display">
             <span class="icon fa fa-chevron-down"></span>
-            <span class="select-value-proxy">Select a type</span>
+            <span class="select-value-proxy">-- Select a type</span>
             <select data-name="requirement" data-label="select" class="hidden-select form-control" required>
-              <option value="saml2" {{#if saml2}}selected {{/if}}>&mdash; SAML2 &mdash;</option>
-              <option value="dataSource" {{#if dataSource}}selected {{/if}}>&mdash; Data source &mdash;</option>
-              <option value="custom" {{#if custom}}selected {{/if}}>&mdash; Custom condition &mdash;</option>
+              <option value="">-- Select a type</option>
+              <option value="saml2" {{#if saml2}}selected {{/if}}>SAML2</option>
+              <option value="dataSource" {{#if dataSource}}selected {{/if}}>Data source</option>
+              <option value="custom" {{#if custom}}selected {{/if}}>Custom condition</option>
             </select>
           </label>
         </div>
@@ -88,26 +88,26 @@
       <div class="form-group clearfix">
         <div class="col-sm-4 control-label">
           <label for="sso_logout_url">Error message</label>
+          <p class="help-block"><small>An error message to present to the user when the hook is rejecting.</small></p>
         </div>
         <div class="col-sm-8">
-          <input type="text" class="form-control" data-name="errorMessage" value="{{errorMessage}}" required/>
-          <h6>An error message to present to the user when the hook is rejecting.</h6>
+          <input type="text" class="form-control" data-name="errorMessage" placeholder="Enter an error message" value="{{errorMessage}}" required/>
         </div>
       </div>
 
       <div class="form-group clearfix custom-condition">
         <div class="col-sm-4 control-label">
           <label for="sso_logout_url">Custom condition</label>
+          <p class="help-block"><small>A custom condition that will trigger the error.</small></p>
         </div>
         <div class="col-sm-8">
           <input type="text" class="form-control" data-name="customCondition" value="{{customCondition}}" required/>
-          <h6>A custom condition set by you that will trigger the error.</h6>
         </div>
       </div>
 
       <div class="form-group clearfix">
         <div class="col-sm-12">
-          <h3>Action on error</h4>
+          <h3><small>Action on error</small></h3>
           <div class="onErrorAction"></div>
         </div>
       </div>
