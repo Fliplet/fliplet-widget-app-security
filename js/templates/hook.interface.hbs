@@ -1,8 +1,14 @@
-<div class="panel panel-default" data-id="{{id}}">
+<div class="panel panel-default accordion{{accordion}}" data-id="{{id}}">
   <div class="panel-heading ui-sortable-handle">
-    <h4 class="panel-title" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{id}}">
+    <h4 class="panel-title" data-toggle="collapse" data-parent="#accordion{{accordion}}" data-target="#collapse-{{id}}">
       <span class="fa fa-chevron-right"></span>
-      <span class="panel-title-text">{{#if name}}{{name}}{{else}}Rule {{number}}{{/if}}</span>
+      <span class="panel-title-text">
+        <span class="requirement"></span>
+        <span class="filterType"></span>
+        <span class="textDefault">
+          {{#if name}}{{name}}{{else}}Rule {{id}}{{/if}}
+        </span>
+      </span>
     </h4>
     <a href="#"><span class="icon-delete fa fa-trash"></span></a>
   </div>
@@ -12,7 +18,7 @@
 
       <div class="form-group clearfix requirement">
         <div class="col-sm-4 control-label">
-          <label for="requirement">Security type</label>
+          <label for="requirement">Which type of security do you want to use?</label>
         </div>
         <div class="col-sm-8">
           <label for="requirement" class="select-proxy-display">
@@ -20,68 +26,11 @@
             <span class="select-value-proxy">-- Select a type</span>
             <select data-name="requirement" data-label="select" class="hidden-select form-control" required>
               <option value="">-- Select a type</option>
-              <option value="saml2" {{#if saml2}}selected {{/if}}>SAML2</option>
-              <option value="dataSource" {{#if dataSource}}selected {{/if}}>Data source</option>
-              <option value="custom" {{#if custom}}selected {{/if}}>Custom condition</option>
+              <option data-name="SAML2" value="saml2" {{#if saml2}}selected {{/if}}>SAML2</option>
+              <option data-name="Data Source" value="dataSource" {{#if dataSource}}selected {{/if}}>Data source</option>
+              <option data-name="Custom Condition" value="custom" {{#if custom}}selected {{/if}}>Custom condition</option>
             </select>
           </label>
-        </div>
-      </div>
-
-      <div class="form-group clearfix">
-        <div class="col-sm-4 control-label">
-          <label for="hookType">Apply...</label>
-        </div>
-        <div class="col-sm-8">
-          <label for="hookType" class="select-proxy-display">
-            <span class="icon fa fa-chevron-down"></span>
-            <span class="select-value-proxy">Select a type</span>
-            <select data-name="hookType" data-label="select" class="hidden-select form-control" required>
-              <option value="">-- Select a type</option>
-              <option value="beforePageView" {{#if beforePageView}}selected {{/if}}>Before page view</option>
-              <option value="beforeDataSourceQuery" {{#if beforeDataSourceQuery}}selected {{/if}}>Before data source query</option>
-            </select>
-          </label>
-        </div>
-      </div>
-
-      <div class="form-group clearfix filter-type">
-        <div class="col-sm-4 control-label">
-          <label for="filterType">Filter type</label>
-        </div>
-        <div class="col-sm-8">
-          <label for="filterType" class="select-proxy-display">
-            <span class="icon fa fa-chevron-down"></span>
-            <span class="select-value-proxy">-- Select a type</span>
-            <select data-name="filterType" data-label="select" class="hidden-select form-control" required>
-              <option value="">-- Select a type</option>
-              <option value="blacklist" {{#if blacklist}}selected {{/if}}>Blacklist</option>
-              <option value="whitelist" {{#if whitelist}}selected {{/if}}>Whitelist</option>
-            </select>
-          </label>
-        </div>
-      </div>
-
-      <div class="form-group clearfix pages">
-        <div class="col-sm-4 control-label">
-          <label for="pages">App screens</label>
-        </div>
-        <div class="col-sm-8">
-          <select class="selectpicker" multiple>
-            {{#each pages}}
-              <option {{#if selected }} selected {{/if}} value="{{ id }}">{{ title }}</option>
-            {{/each}}
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group clearfix">
-        <div class="col-sm-4 control-label">
-          <label for="sso_logout_url">Error message</label>
-          <p class="help-block"><small>An error message to present to the user when the hook is rejecting.</small></p>
-        </div>
-        <div class="col-sm-8">
-          <input type="text" class="form-control" data-name="errorMessage" placeholder="Enter an error message" value="{{errorMessage}}" required/>
         </div>
       </div>
 
@@ -95,9 +44,58 @@
         </div>
       </div>
 
+      <div class="form-group clearfix filter-type">
+        <div class="col-sm-4 control-label">
+          <label for="filterType">How do you want to protect your app?</label>
+        </div>
+        <div class="col-sm-8">
+          <div class="radio radio-icon">
+            <input type="radio" id="blacklist_{{id}}" data-type="filterType" data-name="Blacklist" name="filterType_{{id}}" value="blacklist">
+            <label for="blacklist_{{id}}">
+              <span class="check"><i class="fa fa-circle"></i></span> Protect only the selected screens
+            </label>
+          </div>
+          <div class="radio radio-icon">
+            <input type="radio" id="whitelist_{{id}}" data-type="filterType" data-name="Whitelist" name="filterType_{{id}}" value="whitelist">
+            <label for="whitelist_{{id}}">
+              <span class="check"><i class="fa fa-circle"></i></span> Protect all your app's screens except the ones selected
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="pages">
+        <div class="form-group clearfix pages-blacklist hidden">
+          <div class="col-sm-4 control-label">
+            <label for="pages">Select the screen you want to protect</label>
+          </div>
+          <div class="col-sm-8">
+            <select class="selectpicker" multiple>
+              {{#each pages}}
+                <option {{#if selected }} selected {{/if}} value="{{ id }}">{{ title }}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group clearfix pages-whitelist hidden">
+          <div class="col-sm-4 control-label">
+            <label for="pages">Select the screen you want to leave unprotected</label>
+          </div>
+          <div class="col-sm-8">
+            <select class="selectpicker" multiple>
+              {{#each pages}}
+                <option {{#if selected }} selected {{/if}} value="{{ id }}">{{ title }}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div class="form-group clearfix">
         <div class="col-sm-12">
-          <h3><small>Action on error</small></h3>
+          <h3>Where should users be redirected?</h3>
+          <p>If this rule isn't met, the user will be redirected to the screen you choose.</p>
           <div class="onErrorAction"></div>
         </div>
       </div>

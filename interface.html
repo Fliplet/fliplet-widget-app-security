@@ -1,17 +1,47 @@
-<div class="container-fluid">
-  <form class="form-horizontal">
-    <div class="panel-group ui-sortable" id="accordion">
-    </div>
+<form class="form-horizontal">
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active" id="page-view-control"><a href="#pageView" aria-controls="page-view" role="tab" data-toggle="tab">Page rules</a></li>
+    <li role="presentation" id="data-query-control"><a href="#dataSourceQuery" aria-controls="data-query" role="tab" data-toggle="tab">Data source query rules</a></li>
+  </ul>
 
-    <div class="panels-empty">
-      <p><strong>Create as many list items as you want</strong><br>Click the button below to get started</p>
-    </div>
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane tab-pane-content active" id="pageView">
+      <div class="panel-group ui-sortable" id="accordionPage"></div>
 
-    <div class="controls clearfix">
-      <div class="btn-holder">
-        <div class="btn btn-default new-hook">Add new item</div>
+      <div class="spinner-holder animated">
+        <div class="spinner-overlay">Loading...</div>
+        <p>Loading...</p>
       </div>
-      <div class="btn btn-link expand-items">Expand/Collapse All</div>
+
+      <div class="panels-empty">
+        <p><strong>Create as many rules as you want</strong><br>Click the button below to get started</p>
+      </div>
+
+      <div class="controls clearfix hidden">
+        <div class="btn-holder">
+          <div class="btn btn-default new-hook-page">Add new rule</div>
+        </div>
+        <div class="btn btn-link expand-items">Expand/Collapse All</div>
+      </div>
     </div>
-  </form>
-</div>
+    <div role="tabpanel" class="tab-pane tab-pane-content" id="dataSourceQuery">
+      <div class="panel-group ui-sortable" id="accordionQuery"></div>
+
+      <div class="spinner-holder animated">
+        <div class="spinner-overlay">Loading...</div>
+        <p>Loading...</p>
+      </div>
+
+      <div class="panels-empty">
+        <p><strong>Create as many rules as you want</strong><br>Click the button below to get started</p>
+      </div>
+
+      <div class="controls clearfix hidden">
+        <div class="btn-holder">
+          <div class="btn btn-default new-hook-query">Add new rule</div>
+        </div>
+        <div class="btn btn-link expand-items">Expand/Collapse All</div>
+      </div>
+    </div>
+  </div>
+</form>

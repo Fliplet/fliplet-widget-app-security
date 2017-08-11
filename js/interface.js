@@ -1,14 +1,76 @@
-var $accordionContainer = $('#accordion');
-var hookTemplateId = 1; // Just a counter to have a simple unique id for each hook when rendering the template.
+var $accordionContainer = $('#accordionPage');
+var $accordionTwoContainer = $('#accordionQuery');
+var hookTemplateId = 0; // Just a counter to have a simple unique id for each hook when rendering the template.
 var onErrorActionProviders = {};
 var hooks;
 var pages;
 var accordionCollapsed;
+var accordionTwoCollapsed;
 var panelItems = 0;
+var panelItemsTwo = 0;
 
-if (panelItems > 0) {
-  $('.expand-items').addClass('show');
+function checkPanels(context) {
+  if (context === 'page') {
+    if (panelItems > 0) {
+      $('#pageView .expand-items').addClass('show');
+      $('#pageView .panels-empty').removeClass('show');
+      $('#pageView .spinner-holder').removeClass('animated');
+      $('#pageView .controls').removeClass('hidden');
+    } else {
+      $('#pageView .expand-items').removeClass('show');
+      $('#pageView .panels-empty').addClass('show');
+      $('#pageView .spinner-holder').removeClass('animated');
+      $('#pageView .controls').removeClass('hidden');
+    }
+
+    $('#pageView').find('.filter-type').show();
+    $('#pageView').find('.pages').show();
+  }
+  if (context === 'query') {
+    if (panelItemsTwo > 0) {
+      $('#dataSourceQuery .expand-items').addClass('show');
+      $('#dataSourceQuery .panels-empty').removeClass('show');
+      $('#dataSourceQuery .spinner-holder').removeClass('animated');
+      $('#dataSourceQuery .controls').removeClass('hidden');
+    } else {
+      $('#dataSourceQuery .expand-items').removeClass('show');
+      $('#dataSourceQuery .panels-empty').addClass('show');
+      $('#dataSourceQuery .spinner-holder').removeClass('animated');
+      $('#dataSourceQuery .controls').removeClass('hidden');
+    }
+
+    $('#dataSourceQuery').find('.filter-type').hide();
+    $('#dataSourceQuery').find('.pages').hide();
+  }
+
+  Fliplet.Widget.autosize();
 }
+
+checkPanels('page');
+checkPanels('query');
+
+// SORTING PANELS
+$('.panel-group').sortable({
+  handle: ".panel-heading",
+  cancel: ".icon-delete",
+  tolerance: 'pointer',
+  revert: 150,
+  placeholder: 'panel panel-default placeholder tile',
+  cursor: '-webkit-grabbing; -moz-grabbing;',
+  axis: 'y',
+  start: function(event, ui) {
+    $('.panel-collapse.in').collapse('hide');
+    ui.item.addClass('focus').css('height', ui.helper.find('.panel-heading').outerHeight() + 2);
+    $('.panel').not(ui.item).addClass('faded');
+  },
+  stop: function(event, ui) {
+    ui.item.removeClass('focus');
+    $('.panel').not(ui.item).removeClass('faded');
+  },
+  sort: function(event, ui) {
+    $('.panel-group').sortable('refresh');
+  }
+});
 
 Fliplet().then(function() {
   Promise.all([
@@ -21,7 +83,8 @@ Fliplet().then(function() {
       Object.keys(hooks).forEach(function(hookName) {
         var hook = hooks[hookName];
         hook.settings = hook.settings || {};
-        hook.settings.name = hookName;
+        console.log(hook.settings);
+        hook.settings.name = hook.settings.name || '';
         if (hook.settings.pages) {
           hook.settings.pages = pages.map(function(page) {
             page.selected = hook.settings.pages.indexOf(page.id) > -1;
@@ -30,18 +93,35 @@ Fliplet().then(function() {
         } else {
           hook.settings.pages = pages;
         }
-        addHookItem(hook.settings);
+
+        if (hook.settings.hookType && hook.settings.hookType === 'beforePageView') {
+          addHookItem(hook.settings, 'page');
+          return;
+        }
+
+        if (hook.settings.hookType && hook.settings.hookType === 'beforeDataSourceQuery') {
+          addHookItem(hook.settings, 'query');
+          return;
+        }
+
       });
       Fliplet.Widget.autosize();
     });
 
 });
 
-function addHookItem(settings) {
+function addHookItem(settings, accordionContext) {
   settings = settings || {};
   settings.pages = settings.pages || pages;
   hookTemplateId += 1;
+  var accordionParent;
+  if (accordionContext === 'page') {
+    accordionParent = 'Page';
+  } else if (accordionContext === 'query') {
+    accordionParent = 'Query';
+  }
   var extraContext = {
+    accordion: accordionParent,
     id: hookTemplateId,
     beforeDataSourceQuery: settings.hookType === 'beforeDataSourceQuery',
     beforePageView: settings.hookType === 'beforePageView',
@@ -53,9 +133,23 @@ function addHookItem(settings) {
   };
   var context = $.extend({}, settings, extraContext);
   var $hook = $(Fliplet.Widget.Templates['templates.hook'](context));
-  $accordionContainer.append($hook);
+  if (accordionContext === 'page') {
+    $accordionContainer.append($hook);
+  } else if (accordionContext === 'query') {
+    $accordionTwoContainer.append($hook);
+  }
+
+  if (accordionContext === 'page') {
+    panelItems = $('#accordionPage .panel').length;
+    checkPanels(accordionContext);
+  } else if (accordionContext === 'query') {
+    panelItemsTwo = $('#accordionQuery .panel').length;
+    checkPanels(accordionContext);
+  }
+
   $hook.find('.hidden-select').change();
   $hook.find('.selectpicker').selectpicker('render');
+  $hook.find('input[value="' + settings.filterType + '"]').prop("checked", true).trigger('change');
 
   settings.onErrorAction = settings.onErrorAction || {};
   settings.onErrorAction.action = 'screen';
@@ -63,31 +157,50 @@ function addHookItem(settings) {
     hideAction: true
   };
   onErrorActionProviders[hookTemplateId] = Fliplet.Widget.open('com.fliplet.link', {
-    selector: '#accordion [data-id=' + hookTemplateId + '] .onErrorAction',
+    selector: '.tab-pane [data-id=' + hookTemplateId + '] .onErrorAction',
     data: settings.onErrorAction
   });
 
-  panelItems = $('.panel').length;
-  if (panelItems > 0) {
-    $('.expand-items').addClass('show');
-  }
+
+}
+
+function updateSelectText(el) {
+  var selectedText = $(el).find('option:selected').text();
+  $(el).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 }
 
 // Listeners
-$accordionContainer
+$(document)
   .on('click', '.icon-delete', function() {
+    var context;
     var $item = $(this).closest("[data-id], .panel");
-    $item.remove();
+    var deleteConfirmation = confirm("Are you sure you want to delete this rule?");
+    if ($item.parents('.panel-group').is('#accordionPage')) {
+      context = 'page';
+    } else if ($item.parents('.panel-group').is('#accordionQuery')) {
+      context = 'query';
+    }
 
-    panelItems = $('.panel').length;
-    if (panelItems > 0) {
-      $('.expand-items').addClass('show');
-    } else {
-      $('.expand-items').removeClass('show');
+    if (deleteConfirmation) {
+      $item.remove();
+
+      if (context === 'page') {
+        panelItems = $('#accordionPage .panel').length;
+        checkPanels('page');
+      } else if (context === 'query') {
+        panelItemsTwo = $('#accordionQuery .panel').length;
+        checkPanels('query');
+      }
     }
   })
-  .on('keyup change paste', '[data-name="hookName"]', function() {
-    $(this).parents('.panel').find('.panel-title-text').html(this.value);
+  .on('keyup change paste', '[data-name="requirement"]', function() {
+    var value = $(this).val();
+    var text = $('option[value="' + value + '"]').data('name');
+    if (text) {
+      $(this).parents('.panel').find('.panel-title-text .requirement').html(text);
+      $(this).parents('.panel').find('.panel-title-text .textDefault').addClass('hidden');
+    }
+    updateSelectText(this);
   })
   .on('show.bs.collapse', '.panel-collapse', function() {
     $(this).siblings('.panel-heading').find('.fa-chevron-right').removeClass('fa-chevron-right').addClass('fa-chevron-down');
@@ -98,19 +211,10 @@ $accordionContainer
     Fliplet.Widget.autosize();
   })
   .on('shown.bs.collapse hidden.bs.collapse', '.panel-collapse', function() {
-    $('.tab-content').trigger('scroll');
     Fliplet.Widget.autosize();
   })
-  .on('change', '[data-name="hookType"]', function() {
-    if ($(this).val() === 'beforePageView') {
-      $(this).closest('.panel').find('.filter-type').show();
-      $(this).closest('.panel').find('.pages').show();
-    }
-    if ($(this).val() === 'beforeDataSourceQuery') {
-      $(this).closest('.panel').find('.filter-type').hide();
-      $(this).closest('.panel').find('.pages').hide();
-    }
-    updateSelectText(this);
+  .on('shown.bs.tab', 'a[data-toggle="tab"]', function(e) {
+    Fliplet.Widget.autosize();
   })
   .on('change', '[data-name="requirement"]', function() {
     if ($(this).val() === 'custom') {
@@ -118,46 +222,84 @@ $accordionContainer
     } else {
       $(this).closest('.panel').find('.custom-condition').hide();
     }
-    updateSelectText(this);
   })
-  .on('change', '[data-name="filterType"]', function() {
-    updateSelectText(this);
+  .on('change', '[data-type="filterType"]', function() {
+    var value = $(this).val();
+    var text = $('input[value="' + value + '"]').data('name');
+    if (text) {
+      $(this).parents('.panel').find('.panel-title-text .filterType').html(' - ' + text);
+      $(this).parents('.panel').find('.panel-title-text .textDefault').addClass('hidden');
+    }
+
+    if (value === 'blacklist') {
+      $('.pages-blacklist').removeClass('hidden');
+      $('.pages-whitelist').addClass('hidden');
+      return;
+    }
+
+    if (value === 'whitelist') {
+      $('.pages-whitelist').removeClass('hidden');
+      $('.pages-blacklist').addClass('hidden');
+      return;
+    }
+  })
+  .on('click', '#pageView .expand-items', function() {
+    var $panelCollapse = $(this).parents('#pageView').find('.panel-collapse.in');
+    // Update accordionCollapsed if all panels are collapsed/expanded
+    if (!$panelCollapse.length) {
+      accordionCollapsed = true;
+    } else if ($panelCollapse.length == $(this).parents('#pageView').find('.panel-collapse').length) {
+      accordionCollapsed = false;
+    }
+
+    if (accordionCollapsed) {
+      expandAccordion();
+    } else {
+      collapseAccordion();
+    }
+  })
+  .on('click', '#dataSourceQuery .expand-items', function() {
+    var $panelCollapse = $(this).parents('#dataSourceQuery').find('.panel-collapse.in');
+    // Update accordionCollapsed if all panels are collapsed/expanded
+    if (!$panelCollapse.length) {
+      accordionTwoCollapsed = true;
+    } else if ($panelCollapse.length == $(this).parents('#dataSourceQuery').find('.panel-collapse.in').length) {
+      accordionTwoCollapsed = false;
+    }
+
+    if (accordionTwoCollapsed) {
+      expandAccordionTwo();
+    } else {
+      collapseAccordionTwo();
+    }
   });
-
-function updateSelectText(el) {
-  var selectedText = $(el).find('option:selected').text();
-  $(el).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
-};
-
-
-$('.expand-items').on('click', function() {
-  var $panelCollapse = $('.panel-collapse.in');
-  // Update accordionCollapsed if all panels are collapsed/expanded
-  if (!$panelCollapse.length) {
-    accordionCollapsed = true;
-  } else if ($panelCollapse.length == $('.panel-collapse').length) {
-    accordionCollapsed = false;
-  }
-
-  if (accordionCollapsed) {
-    expandAccordion();
-  } else {
-    collapseAccordion();
-  }
-});
 
 function expandAccordion() {
   accordionCollapsed = false;
-  $('.panel-collapse').collapse('show');
+  $('#accordionPage .panel-collapse').collapse('show');
 }
 
 function collapseAccordion() {
   accordionCollapsed = true;
-  $('.panel-collapse').collapse('hide');
+  $('#accordionPage .panel-collapse').collapse('hide');
 }
 
-$('.new-hook').on('click', function() {
-  addHookItem();
+function expandAccordionTwo() {
+  accordionTwoCollapsed = false;
+  $('#accordionQuery .panel-collapse').collapse('show');
+}
+
+function collapseAccordionTwo() {
+  accordionTwoCollapsed = true;
+  $('#accordionQuery .panel-collapse').collapse('hide');
+}
+
+$('.new-hook-page').on('click', function() {
+  addHookItem({}, 'page');
+});
+
+$('.new-hook-query').on('click', function() {
+  addHookItem({}, 'query');
 });
 
 Fliplet.Widget.onSaveRequest(function() {
@@ -166,26 +308,37 @@ Fliplet.Widget.onSaveRequest(function() {
   // Create a hook for each panel
   $('[data-id]').each(function() {
     var id = $(this).data('id');
+    var context = $(this).hasClass('accordionPage') ? 'page' : 'query';
+
+    var filterType = $(this).find('input[name="filterType_' + id + '"]:checked').val();
+    var requirement = $(this).find('[data-name="requirement"]').val();
+    var customCondition = $(this).find('[data-name="customCondition"]').val();
 
     // Get selected pages
     var pages = [];
-    $.each($(this).find(".selectpicker option:selected"), function() {
-      pages.push(Number($(this).val()));
-    });
+    if (filterType === 'blacklist') {
+      $.each($(this).find(".pages-blacklist .selectpicker option:selected"), function() {
+        pages.push(Number($(this).val()));
+      });
+    }
+    if (filterType === 'whitelist') {
+      $.each($(this).find(".pages-whitelist .selectpicker option:selected"), function() {
+        pages.push(Number($(this).val()));
+      });
+    }
 
     var hookName = 'Rule ' + (new Date()).getTime().toString().substring(9);
     newHooks[hookName] = {};
     newHooks[hookName].settings = {
-      name: hookName,
-      hookType: $(this).find('[data-name=hookType]').val(),
-      filterType: $(this).find('[data-name=filterType]').val(),
-      requirement: $(this).find('[data-name=requirement]').val(),
-      errorMessage: $(this).find('[data-name=errorMessage]').val(),
-      customCondition: $(this).find('[data-name=customCondition]').val(),
-      pages: pages
+      hookType: context === 'page' ? 'beforePageView' : 'beforeDataSourceQuery',
+      filterType: filterType,
+      requirement: requirement,
+      customCondition: customCondition,
+      pages: pages,
+      name: $('option[value="' + requirement + '"]').data('name') + ' - ' + $('input[value="' + filterType + '"]').data('name')
     };
     newHooks[hookName].run = [$(this).find('#filterType').val()];
-
+    console.log(newHooks[hookName].settings);
     onErrorActionProviders[id].then(function(result) {
       newHooks[hookName].settings.onErrorAction = result && result.data;
       newHooks[hookName].script = compile(newHooks[hookName].settings);
@@ -194,7 +347,9 @@ Fliplet.Widget.onSaveRequest(function() {
 
   Object.keys(onErrorActionProviders).map(function(id) {
     return onErrorActionProviders[id].forwardSaveRequest();
-  })
+  });
+
+  Fliplet.Widget.save();
 
   return Fliplet.API.request({
     url: 'v1/apps/' + Fliplet.Env.get('appId'),
