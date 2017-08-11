@@ -83,7 +83,6 @@ Fliplet().then(function() {
       Object.keys(hooks).forEach(function(hookName) {
         var hook = hooks[hookName];
         hook.settings = hook.settings || {};
-        console.log(hook.settings);
         hook.settings.name = hook.settings.name || '';
         if (hook.settings.pages) {
           hook.settings.pages = pages.map(function(page) {
@@ -152,7 +151,9 @@ function addHookItem(settings, accordionContext) {
   $hook.find('input[value="' + settings.filterType + '"]').prop("checked", true).trigger('change');
 
   settings.onErrorAction = settings.onErrorAction || {};
-  settings.onErrorAction.action = 'screen';
+  settings.onErrorAction.action = settings.onErrorAction.action || 'screen';
+  settings.onErrorAction.page = settings.onErrorAction.page || 'none';
+  settings.onErrorAction.transition = settings.onErrorAction.transition || 'slide.left';
   settings.onErrorAction.options = {
     hideAction: true
   };
@@ -338,9 +339,8 @@ Fliplet.Widget.onSaveRequest(function() {
       name: $('option[value="' + requirement + '"]').data('name') + ' - ' + $('input[value="' + filterType + '"]').data('name')
     };
     newHooks[hookName].run = [$(this).find('#filterType').val()];
-    console.log(newHooks[hookName].settings);
     onErrorActionProviders[id].then(function(result) {
-      newHooks[hookName].settings.onErrorAction = result && result.data;
+      newHooks[hookName].settings.onErrorAction = result && result.data ? result.data : {};
       newHooks[hookName].script = compile(newHooks[hookName].settings);
     });
   });
