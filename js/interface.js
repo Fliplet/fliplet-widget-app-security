@@ -110,7 +110,7 @@ Fliplet().then(function() {
 
 });
 
-function addHookItem(settings, accordionContext) {
+function addHookItem(settings, accordionContext, add) {
   settings = settings || {};
   settings.pages = settings.pages || pages;
   hookTemplateId += 1;
@@ -170,7 +170,15 @@ function addHookItem(settings, accordionContext) {
 
   $hook.find('.hidden-select').change();
   $hook.find('.selectpicker').selectpicker('render');
-  $hook.find('input[value="' + settings.filterType + '"]').prop("checked", true).trigger('change');
+  if (settings.filterType) {
+    $hook.find('input[value="' + settings.filterType + '"]').prop("checked", true).trigger('change');
+  } else {
+    $hook.find('input[value="blacklist"]').prop("checked", true).trigger('change');
+  }
+
+  if (add) {
+    $hook.find('.panel-collapse').collapse('toggle');
+  }
 }
 
 function updateSelectText(el) {
@@ -202,7 +210,7 @@ $(document)
       }
     }
   })
-  .on('keyup change paste', '[data-name="requirement"]', function() {
+  .on('change', '[data-name="requirement"]', function() {
     var value = $(this).val();
     var text = $('option[value="' + value + '"]').data('name');
     if (text) {
@@ -233,8 +241,12 @@ $(document)
       if (codeEditors[id]) {
         codeEditors[id].refresh();
       }
+      $('.linkProvider').addClass('hidden');
+    } else if ($(this).val() === '') {
+      $('.linkProvider').addClass('hidden');
     } else {
       $(this).closest('.panel').find('.custom-condition').hide();
+      $('.linkProvider').removeClass('hidden');
     }
   })
   .on('change', '[data-type="filterType"]', function() {
@@ -309,11 +321,11 @@ function collapseAccordionTwo() {
 }
 
 $('.new-hook-page').on('click', function() {
-  addHookItem({}, 'page');
+  addHookItem({}, 'page', true);
 });
 
 $('.new-hook-query').on('click', function() {
-  addHookItem({}, 'query');
+  addHookItem({}, 'query', true);
 });
 
 Fliplet.Widget.onSaveRequest(function() {
@@ -343,7 +355,7 @@ Fliplet.Widget.onSaveRequest(function() {
       });
     }
 
-    var hookName = 'Rule ' + (new Date()).getTime().toString().substring(9);
+    var hookName = 'Rule ' + id;
     newHooks[hookName] = {};
     newHooks[hookName].settings = {
       hookType: context === 'page' ? 'beforePageView' : 'beforeDataSourceQuery',
@@ -366,6 +378,7 @@ Fliplet.Widget.onSaveRequest(function() {
 
   Fliplet.Widget.all(onErrorActionProvidersArray)
     .then(function() {
+      Fliplet.Widget.save();
       return Fliplet.API.request({
         url: 'v1/apps/' + Fliplet.Env.get('appId'),
         method: 'PUT',
