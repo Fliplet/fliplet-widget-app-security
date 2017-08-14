@@ -217,6 +217,13 @@ $(document)
   .on('shown.bs.tab', 'a[data-toggle="tab"]', function(e) {
     Fliplet.Widget.autosize();
   })
+  .on('change', '[data-name="requirement"]', function() {
+    if ($(this).val() === 'custom') {
+      $(this).closest('.panel').find('.custom-condition').show();
+    } else {
+      $(this).closest('.panel').find('.custom-condition').hide();
+    }
+  })
   .on('change', '[data-type="filterType"]', function() {
     var value = $(this).val();
     var text = $('input[value="' + value + '"]').data('name');
