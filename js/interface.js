@@ -398,8 +398,7 @@ function compile(hook) {
       ')',
       '{',
       'error = "' + hook.errorMessage + '";',
-      'action = ' + (hook.onErrorAction.action ? '"' + hook.onErrorAction.action + '"' : 'null') + ';',
-      'payload = ' + (hook.onErrorAction.page ? '{ pageId: ' + hook.onErrorAction.page + ' }' : 'null') + ';',
+      'navigate = ' + (hook.onErrorAction.action ? '"' + hook.onErrorAction.action + '"' : 'null') + ';',
       '}'
     ].join('');
   }
