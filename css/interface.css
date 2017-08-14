@@ -7,16 +7,16 @@
   text-align: center;
 }
 
-.custom-condition {
-  display: none;
-}
-
 .form-horizontal .radio.radio-icon {
   padding-top: 0;
 }
 
 .tab-content {
   margin-top: 15px;
+}
+
+.nav-tabs {
+  padding-top: 13px;
 }
 
 .nav-tabs>li.active>a,
