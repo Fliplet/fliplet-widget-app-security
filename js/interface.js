@@ -159,7 +159,8 @@ function addHookItem(settings, accordionContext) {
   };
   onErrorActionProviders[hookTemplateId] = Fliplet.Widget.open('com.fliplet.link', {
     selector: '.tab-pane [data-id=' + hookTemplateId + '] .onErrorAction',
-    data: settings.onErrorAction
+    data: settings.onErrorAction,
+    closeOnSave: false
   });
 
 
