@@ -5,7 +5,7 @@
   </ul>
 
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane tab-pane-content active" id="pageView">
+    <div role="tabpanel" data-hook-type='beforePageView' class="tab-pane tab-pane-content active" id="pageView">
       <div class="panel-group ui-sortable" id="accordionPage"></div>
 
       <div class="spinner-holder animated">
@@ -24,7 +24,7 @@
         <div class="btn btn-link expand-items">Expand/Collapse All</div>
       </div>
     </div>
-    <div role="tabpanel" class="tab-pane tab-pane-content" id="dataSourceQuery">
+    <div role="tabpanel" data-hook-type='beforeDataSourceQuery' class="tab-pane tab-pane-content" id="dataSourceQuery">
       <div class="panel-group ui-sortable" id="accordionQuery"></div>
 
       <div class="spinner-holder animated">

@@ -339,7 +339,7 @@ Fliplet.Widget.onSaveRequest(function() {
       pages: pages,
       name: $('option[value="' + requirement + '"]').data('name') + ' - ' + $('input[value="' + filterType + '"]').data('name')
     };
-    newHooks[hookName].run = [$(this).find('#filterType').val()];
+    newHooks[hookName].run = [$(this).parents('[data-hook-type]').data('hook-type')];
     onErrorActionProviders[id].then(function(result) {
       newHooks[hookName].settings.onErrorAction = result && result.data ? result.data : {};
       newHooks[hookName].script = compile(newHooks[hookName].settings);
