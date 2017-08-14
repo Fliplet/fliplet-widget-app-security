@@ -390,7 +390,7 @@ function compile(hook) {
       return hook.customCondition;
     }
 
-    var comparison = hook.filterType === 'whitelist' ? '>' : '===';
+    var comparison = hook.filterType === 'whitelist' ? '===' : '>';
     return [
       'if ([' + hook.pages + '].indexOf(page.id) ' + comparison + ' -1 && ',
       '(!session || !session.server.passports.' + hook.requirement + ')',
