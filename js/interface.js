@@ -366,6 +366,10 @@ Fliplet.Widget.onSaveRequest(function() {
  */
 function compile(hook) {
   if (hook.hookType === 'beforePageView') {
+    if (hook.requirement === 'custom') {
+      return hook.customCondition;
+    } 
+
     var comparison = hook.filterType === 'whitelist' ? '>' : '===';
     return [
       'if ([' + hook.pages + '].indexOf(page.id) ' + comparison + ' -1 && ',
@@ -381,19 +385,12 @@ function compile(hook) {
   }
 
   if (hook.hookType === 'beforeDataSourceQuery') {
-    var condition;
     if (hook.requirement === 'custom') {
-      condition = hook.customCondition;
-    } else {
-      condition = '!session || !session.server.passports.' + hook.requirement;
-      // Also add custom condition if set even with a passport requirement
-      if (hook.customCondition) {
-        condition = condition + ' && ' + hook.customCondition
-      }
+      return hook.customCondition;
     }
 
     return [
-      'if (' + condition + ')',
+      'if (' + '!session || !session.server.passports.' + hook.requirement + ')',
       '{',
       'error = "' + hook.errorMessage || 'Secured query' + '";',
       '}'
