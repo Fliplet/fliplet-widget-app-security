@@ -345,18 +345,23 @@ Fliplet.Widget.onSaveRequest(function() {
     });
   });
 
-  Object.keys(onErrorActionProviders).map(function(id) {
-    return onErrorActionProviders[id].forwardSaveRequest();
+  var onErrorActionProvidersArray = Object.keys(onErrorActionProviders).map(function(id) {
+    return onErrorActionProviders[id];
   });
 
-  Fliplet.Widget.save();
+  Fliplet.Widget.all(onErrorActionProvidersArray)
+    .then(function() {
+      return Fliplet.API.request({
+        url: 'v1/apps/' + Fliplet.Env.get('appId'),
+        method: 'PUT',
+        data: {
+          hooks: newHooks
+        }
+      });
+    });
 
-  return Fliplet.API.request({
-    url: 'v1/apps/' + Fliplet.Env.get('appId'),
-    method: 'PUT',
-    data: {
-      hooks: newHooks
-    }
+  onErrorActionProvidersArray.forEach(function(onErrorActionProvider) {
+    onErrorActionProvider.forwardSaveRequest();
   });
 });
 
