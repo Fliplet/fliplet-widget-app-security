@@ -8,6 +8,7 @@ var accordionCollapsed;
 var accordionTwoCollapsed;
 var panelItems = 0;
 var panelItemsTwo = 0;
+var codeEditors = {};
 
 function checkPanels(context) {
   if (context === 'page') {
@@ -146,10 +147,6 @@ function addHookItem(settings, accordionContext) {
     checkPanels(accordionContext);
   }
 
-  $hook.find('.hidden-select').change();
-  $hook.find('.selectpicker').selectpicker('render');
-  $hook.find('input[value="' + settings.filterType + '"]').prop("checked", true).trigger('change');
-
   settings.onErrorAction = settings.onErrorAction || {};
   settings.onErrorAction.action = settings.onErrorAction.action || 'screen';
   settings.onErrorAction.page = settings.onErrorAction.page || 'none';
@@ -163,7 +160,17 @@ function addHookItem(settings, accordionContext) {
     closeOnSave: false
   });
 
+  codeEditors[hookTemplateId] = CodeMirror.fromTextArea(document.getElementById('codeEditor' + hookTemplateId), {
+    height: "150px",
+    mode: 'htmlmixed',
+    lineNumbers: true,
+    autoRefresh: true,
+    lineWrapping: true
+  });
 
+  $hook.find('.hidden-select').change();
+  $hook.find('.selectpicker').selectpicker('render');
+  $hook.find('input[value="' + settings.filterType + '"]').prop("checked", true).trigger('change');
 }
 
 function updateSelectText(el) {
@@ -219,8 +226,13 @@ $(document)
     Fliplet.Widget.autosize();
   })
   .on('change', '[data-name="requirement"]', function() {
+    var id = $(this).closest('.panel').find('.custom-condition').data('panel-id');
+
     if ($(this).val() === 'custom') {
       $(this).closest('.panel').find('.custom-condition').show();
+      if (codeEditors[id]) {
+        codeEditors[id].refresh();
+      }
     } else {
       $(this).closest('.panel').find('.custom-condition').hide();
     }
@@ -314,7 +326,9 @@ Fliplet.Widget.onSaveRequest(function() {
 
     var filterType = $(this).find('input[name="filterType_' + id + '"]:checked').val();
     var requirement = $(this).find('[data-name="requirement"]').val();
-    var customCondition = $(this).find('[data-name="customCondition"]').val();
+
+    var editorId = $(this).find('[data-name="customCondition"]').data('editor-id');
+    var customCondition = codeEditors[editorId].getValue();
 
     // Get selected pages
     var pages = [];
@@ -374,7 +388,7 @@ function compile(hook) {
   if (hook.hookType === 'beforePageView') {
     if (hook.requirement === 'custom') {
       return hook.customCondition;
-    } 
+    }
 
     var comparison = hook.filterType === 'whitelist' ? '>' : '===';
     return [

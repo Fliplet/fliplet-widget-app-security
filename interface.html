@@ -1,11 +1,12 @@
 <form class="form-horizontal">
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active" id="page-view-control"><a href="#pageView" aria-controls="page-view" role="tab" data-toggle="tab">Page rules</a></li>
-    <li role="presentation" id="data-query-control"><a href="#dataSourceQuery" aria-controls="data-query" role="tab" data-toggle="tab">Data source query rules</a></li>
+    <li role="presentation" class="active" id="page-view-control"><a href="#pageView" aria-controls="page-view" role="tab" data-toggle="tab">Page security</a></li>
+    <li role="presentation" id="data-query-control"><a href="#dataSourceQuery" aria-controls="data-query" role="tab" data-toggle="tab">Data source query security</a></li>
   </ul>
 
   <div class="tab-content">
     <div role="tabpanel" data-hook-type='beforePageView' class="tab-pane tab-pane-content active" id="pageView">
+      <p>When you set up your page security rules, these will be applied when a user navigates to a screen of your app.</p>
       <div class="panel-group ui-sortable" id="accordionPage"></div>
 
       <div class="spinner-holder animated">
@@ -25,6 +26,7 @@
       </div>
     </div>
     <div role="tabpanel" data-hook-type='beforeDataSourceQuery' class="tab-pane tab-pane-content" id="dataSourceQuery">
+      <p>When you set up your data source query security rules, these will be applied when a user or component does a query on your data source.</p>
       <div class="panel-group ui-sortable" id="accordionQuery"></div>
 
       <div class="spinner-holder animated">

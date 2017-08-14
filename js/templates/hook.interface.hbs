@@ -18,7 +18,7 @@
 
       <div class="form-group clearfix requirement">
         <div class="col-sm-4 control-label">
-          <label for="requirement">Which type of security do you want to use?</label>
+          <label for="requirement">Select the condition for your rule</label>
         </div>
         <div class="col-sm-8">
           <label for="requirement" class="select-proxy-display">
@@ -26,21 +26,20 @@
             <span class="select-value-proxy">-- Select a type</span>
             <select data-name="requirement" data-label="select" class="hidden-select form-control" required>
               <option value="">-- Select a type</option>
-              <option data-name="SAML2" value="saml2" {{#if saml2}}selected {{/if}}>SAML2</option>
-              <option data-name="Data Source" value="dataSource" {{#if dataSource}}selected {{/if}}>Data source</option>
-              <option data-name="Custom Condition" value="custom" {{#if custom}}selected {{/if}}>Custom condition</option>
+              <option data-name="SAML2" value="saml2" {{#if saml2}}selected {{/if}}>Require a valid SAML2 login</option>
+              <option data-name="Data Source" value="dataSource" {{#if dataSource}}selected {{/if}}>Require authentication against a data source</option>
+              <option data-name="Custom Condition" value="custom" {{#if custom}}selected {{/if}}>I'll write my own condition</option>
             </select>
           </label>
         </div>
       </div>
 
-      <div class="form-group clearfix custom-condition">
+      <div class="form-group clearfix custom-condition" data-panel-id="{{id}}">
         <div class="col-sm-4 control-label">
           <label for="sso_logout_url">Custom condition</label>
-          <p class="help-block"><small>A custom condition that will trigger the error.</small></p>
         </div>
         <div class="col-sm-8">
-          <input type="text" class="form-control" data-name="customCondition" value="{{customCondition}}" required/>
+          <textarea class="form-control" id="codeEditor{{id}}" data-editor-id="{{id}}" data-name="customCondition" rows="8">{{customCondition}}</textarea>
         </div>
       </div>
 
@@ -52,13 +51,13 @@
           <div class="radio radio-icon">
             <input type="radio" id="blacklist_{{id}}" data-type="filterType" data-name="Blacklist" name="filterType_{{id}}" value="blacklist">
             <label for="blacklist_{{id}}">
-              <span class="check"><i class="fa fa-circle"></i></span> Protect only the selected screens
+              <span class="check"><i class="fa fa-circle"></i></span> Protect only the following screens...
             </label>
           </div>
           <div class="radio radio-icon">
             <input type="radio" id="whitelist_{{id}}" data-type="filterType" data-name="Whitelist" name="filterType_{{id}}" value="whitelist">
             <label for="whitelist_{{id}}">
-              <span class="check"><i class="fa fa-circle"></i></span> Protect all your app's screens except the ones selected
+              <span class="check"><i class="fa fa-circle"></i></span> Protect all your app's screens except the following...
             </label>
           </div>
         </div>
@@ -67,7 +66,7 @@
       <div class="pages">
         <div class="form-group clearfix pages-blacklist hidden">
           <div class="col-sm-4 control-label">
-            <label for="pages">Select the screen you want to protect</label>
+            <label for="pages">Select the screens you want to protect</label>
           </div>
           <div class="col-sm-8">
             <select class="selectpicker" multiple>
@@ -80,7 +79,7 @@
 
         <div class="form-group clearfix pages-whitelist hidden">
           <div class="col-sm-4 control-label">
-            <label for="pages">Select the screen you want to leave unprotected</label>
+            <label for="pages">Select the screens that are the exception</label>
           </div>
           <div class="col-sm-8">
             <select class="selectpicker" multiple>
@@ -94,8 +93,7 @@
 
       <div class="form-group clearfix">
         <div class="col-sm-12">
-          <h3>Where should users be redirected?</h3>
-          <p>If this rule isn't met, the user will be redirected to the screen you choose.</p>
+          <h3><small>If the condition is not met, the user will be redirected to the screen you choose bellow.</small></h3>
           <div class="onErrorAction"></div>
         </div>
       </div>

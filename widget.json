@@ -13,7 +13,8 @@
       "fliplet-studio-ui",
       "jquery-ui",
       "handlebars",
-      "bootstrap-select"
+      "bootstrap-select",
+      "codemirror"
     ],
     "assets": [
       "css/interface.css",
