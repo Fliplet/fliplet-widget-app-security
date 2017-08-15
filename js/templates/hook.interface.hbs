@@ -4,7 +4,6 @@
       <span class="fa fa-chevron-right"></span>
       <span class="panel-title-text">
         <span class="requirement"></span>
-        <span class="filterType"></span>
         <span class="textDefault">
           {{#if name}}{{name}}{{else}}Rule {{id}}{{/if}}
         </span>
@@ -29,8 +28,36 @@
               <option data-name="SAML2" value="saml2" {{#if saml2}}selected {{/if}}>Require a valid SAML2 login</option>
               <option data-name="Data Source" value="dataSource" {{#if dataSource}}selected {{/if}}>Require authentication against a data source</option>
               <option data-name="Custom Condition" value="custom" {{#if custom}}selected {{/if}}>I'll write my own condition</option>
+              <option data-name="Inherit Condition" value="inherit" {{#if inherit}}selected {{/if}}>Inherit condition(s) from another app</option>
             </select>
           </label>
+        </div>
+      </div>
+
+      <div class="form-group clearfix appSelect hidden">
+        <div class="col-sm-4 control-label">
+          <label for="app-select">Select the app</label>
+        </div>
+
+        <div class="appSelect spinner-holder animated">
+          <div class="spinner-overlay">Loading...</div>
+          <p>Loading...</p>
+        </div>
+
+        <div class="col-sm-8 changeText hidden">
+          <p class="form-control-static"><span>{{inheritAppName}}</span> - <a href="#" data-change-app>Change</a></p>
+        </div>
+
+        <div class="selectField hidden">
+          <div class="col-sm-8">
+            <label for="app-select" class="select-proxy-display">
+              <select data-name="app-select" data-label="select" class="hidden-select form-control" disabled required>
+                <option value="">-- Select an app</option>
+              </select>
+              <span class="icon fa fa-chevron-down"></span>
+              <span class="select-value-proxy">-- Select an app</span>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -49,13 +76,13 @@
         </div>
         <div class="col-sm-8">
           <div class="radio radio-icon">
-            <input type="radio" id="blacklist_{{id}}" data-type="filterType" data-name="Blacklist" name="filterType_{{id}}" value="blacklist">
+            <input type="radio" id="blacklist_{{id}}" data-type="filterType" name="filterType_{{id}}" value="blacklist">
             <label for="blacklist_{{id}}">
               <span class="check"><i class="fa fa-circle"></i></span> Protect only the following screens...
             </label>
           </div>
           <div class="radio radio-icon">
-            <input type="radio" id="whitelist_{{id}}" data-type="filterType" data-name="Whitelist" name="filterType_{{id}}" value="whitelist">
+            <input type="radio" id="whitelist_{{id}}" data-type="filterType" name="filterType_{{id}}" value="whitelist">
             <label for="whitelist_{{id}}">
               <span class="check"><i class="fa fa-circle"></i></span> Protect all your app's screens except the following...
             </label>

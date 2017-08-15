@@ -4,6 +4,7 @@ var hookTemplateId = 0; // Just a counter to have a simple unique id for each ho
 var onErrorActionProviders = {};
 var hooks;
 var pages;
+var apps;
 var accordionCollapsed;
 var accordionTwoCollapsed;
 var panelItems = 0;
@@ -15,12 +16,12 @@ function checkPanels(context) {
     if (panelItems > 0) {
       $('#pageView .expand-items').addClass('show');
       $('#pageView .panels-empty').removeClass('show');
-      $('#pageView .spinner-holder').removeClass('animated');
+      $('#pageView .tab-spinner.spinner-holder').removeClass('animated');
       $('#pageView .controls').removeClass('hidden');
     } else {
       $('#pageView .expand-items').removeClass('show');
       $('#pageView .panels-empty').addClass('show');
-      $('#pageView .spinner-holder').removeClass('animated');
+      $('#pageView .tab-spinner.spinner-holder').removeClass('animated');
       $('#pageView .controls').removeClass('hidden');
     }
 
@@ -31,12 +32,12 @@ function checkPanels(context) {
     if (panelItemsTwo > 0) {
       $('#dataSourceQuery .expand-items').addClass('show');
       $('#dataSourceQuery .panels-empty').removeClass('show');
-      $('#dataSourceQuery .spinner-holder').removeClass('animated');
+      $('#dataSourceQuery .tab-spinner.spinner-holder').removeClass('animated');
       $('#dataSourceQuery .controls').removeClass('hidden');
     } else {
       $('#dataSourceQuery .expand-items').removeClass('show');
       $('#dataSourceQuery .panels-empty').addClass('show');
-      $('#dataSourceQuery .spinner-holder').removeClass('animated');
+      $('#dataSourceQuery .tab-spinner.spinner-holder').removeClass('animated');
       $('#dataSourceQuery .controls').removeClass('hidden');
     }
 
@@ -76,11 +77,14 @@ $('.panel-group').sortable({
 Fliplet().then(function() {
   Promise.all([
       Fliplet.App.Hooks.get(),
-      Fliplet.Pages.get()
+      Fliplet.Pages.get(),
+      Fliplet.Apps.get()
     ])
     .then(function(values) {
       hooks = values[0];
       pages = values[1];
+      apps = values[2];
+
       Object.keys(hooks).forEach(function(hookName) {
         var hook = hooks[hookName];
         hook.settings = hook.settings || {};
@@ -103,8 +107,8 @@ Fliplet().then(function() {
           addHookItem(hook.settings, 'query');
           return;
         }
-
       });
+
       Fliplet.Widget.autosize();
     });
 
@@ -129,7 +133,8 @@ function addHookItem(settings, accordionContext, add) {
     blacklist: settings.filterType === 'blacklist',
     saml2: settings.requirement === 'saml2',
     dataSource: settings.requirement === 'dataSource',
-    custom: settings.requirement === 'custom'
+    custom: settings.requirement === 'custom',
+    inherit: settings.requirement === 'inherit'
   };
   var context = $.extend({}, settings, extraContext);
   var $hook = $(Fliplet.Widget.Templates['templates.hook'](context));
@@ -168,6 +173,11 @@ function addHookItem(settings, accordionContext, add) {
     lineWrapping: true
   });
 
+  apps.forEach(function(app) {
+    $hook.find('.selectField select').append('<option data-name="' + app.name + '" value="' + app.id + '">' + app.name + '</option>');
+  });
+  $hook.find('.selectField select').removeAttr('disabled');
+
   $hook.find('.hidden-select').change();
   $hook.find('.selectpicker').selectpicker('render');
   if (settings.filterType) {
@@ -178,6 +188,25 @@ function addHookItem(settings, accordionContext, add) {
 
   if (add) {
     $hook.find('.panel-collapse').collapse('toggle');
+  }
+
+  if (!settings.inheritAppId && !settings.inheritAppName) {
+    $hook.find('.appSelect.spinner-holder').removeClass('animated');
+    $hook.find('.selectField').removeClass('hidden');
+  } else {
+    var hasAccessToApp = _.find(apps, function(app) {
+      return app.id === parseInt(settings.inheritAppId, 10);
+    });
+
+    if (hasAccessToApp) {
+      $hook.find('.appSelect.spinner-holder').removeClass('animated');
+      $hook.find('.selectField select option[value="' + settings.inheritAppId + '"]').prop('selected', true);
+      updateSelectText($hook.find('.selectField select'));
+      $hook.find('.selectField').removeClass('hidden');
+    } else {
+      $hook.find('.appSelect.spinner-holder').removeClass('animated');
+      $hook.find('.changeText').removeClass('hidden');
+    }
   }
 }
 
@@ -243,21 +272,29 @@ $(document)
       if (codeEditors[id]) {
         codeEditors[id].refresh();
       }
-      $('.linkProvider').addClass('hidden');
-    } else if ($(this).val() === '') {
-      $('.linkProvider').addClass('hidden');
-    } else {
+      $(this).closest('.panel').find('.linkProvider').addClass('hidden');
+    }
+
+    if ($(this).val() !== 'custom') {
       $(this).closest('.panel').find('.custom-condition').hide();
-      $('.linkProvider').removeClass('hidden');
+      $(this).closest('.panel').find('.linkProvider').removeClass('hidden');
+    }
+
+    // If Inherit option
+    if ($(this).val() === 'inherit') {
+      $(this).closest('.panel').find('.appSelect').removeClass('hidden');
+      $(this).closest('.panel').find('.linkProvider').addClass('hidden');
+    }
+
+    // no option selected
+    if ($(this).val() === '') {
+      $(this).closest('.panel').find('.appSelect').addClass('hidden');
+      $(this).closest('.panel').find('.linkProvider').addClass('hidden');
+      $(this).closest('.panel').find('.custom-condition').hide();
     }
   })
   .on('change', '[data-type="filterType"]', function() {
     var value = $(this).val();
-    var text = $('input[value="' + value + '"]').data('name');
-    if (text) {
-      $(this).parents('.panel').find('.panel-title-text .filterType').html(' - ' + text);
-      $(this).parents('.panel').find('.panel-title-text .textDefault').addClass('hidden');
-    }
 
     if (value === 'blacklist') {
       $('.pages-blacklist').removeClass('hidden');
@@ -300,6 +337,10 @@ $(document)
     } else {
       collapseAccordionTwo();
     }
+  })
+  .on('click', '[data-change-app]', function() {
+    $(this).parents('.changeText').addClass('hidden');
+    $(this).parents('.changeText').siblings('.selectField').removeClass('hidden');
   });
 
 function expandAccordion() {
@@ -343,6 +384,8 @@ Fliplet.Widget.onSaveRequest(function() {
 
     var editorId = $(this).find('[data-name="customCondition"]').data('editor-id');
     var customCondition = codeEditors[editorId].getValue();
+    var inheritAppId = $(this).find('[data-name="app-select"]').val();
+    var inheritAppName = $(this).find('[data-name="app-select"] option[value="' + inheritAppId + '"]').data('name');
 
     // Get selected pages
     var pages = [];
@@ -365,7 +408,10 @@ Fliplet.Widget.onSaveRequest(function() {
       requirement: requirement,
       customCondition: customCondition,
       pages: pages,
-      name: $('option[value="' + requirement + '"]').data('name') + ' - ' + $('input[value="' + filterType + '"]').data('name')
+      name: $('option[value="' + requirement + '"]').data('name') + ' - ' + $('input[value="' + filterType + '"]').data('name'),
+      inheritAppId: inheritAppId,
+      inheritAppName: inheritAppName
+
     };
     newHooks[hookName].run = [$(this).parents('[data-hook-type]').data('hook-type')];
     onErrorActionProviders[id].then(function(result) {
