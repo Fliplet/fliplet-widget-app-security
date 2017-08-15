@@ -85,8 +85,7 @@ Fliplet().then(function() {
       pages = values[1];
       apps = values[2];
 
-      Object.keys(hooks).forEach(function(hookName) {
-        var hook = hooks[hookName];
+      hooks.forEach(function(hook) {
         hook.settings = hook.settings || {};
         hook.settings.name = hook.settings.name || '';
         if (hook.settings.pages) {
@@ -372,7 +371,7 @@ $('.new-hook-query').on('click', function() {
 });
 
 Fliplet.Widget.onSaveRequest(function() {
-  var newHooks = {};
+  var newHooks = [];
 
   // Create a hook for each panel
   $('[data-id]').each(function() {
@@ -401,22 +400,25 @@ Fliplet.Widget.onSaveRequest(function() {
     }
 
     var hookName = 'Rule ' + id;
-    newHooks[hookName] = {};
-    newHooks[hookName].settings = {
-      hookType: context === 'page' ? 'beforePageView' : 'beforeDataSourceQuery',
-      filterType: filterType,
-      requirement: requirement,
-      customCondition: customCondition,
-      pages: pages,
-      name: $('option[value="' + requirement + '"]').data('name') + ' - ' + $('input[value="' + filterType + '"]').data('name'),
-      inheritAppId: inheritAppId,
-      inheritAppName: inheritAppName
-
+    var newHook = {
+      name: hookName,
+      settings: {
+        hookType: context === 'page' ? 'beforePageView' : 'beforeDataSourceQuery',
+        filterType: filterType,
+        requirement: requirement,
+        customCondition: customCondition,
+        pages: pages,
+        name: $('option[value="' + requirement + '"]').data('name') + ' - ' + $('input[value="' + filterType + '"]').data('name'),
+        inheritAppId: inheritAppId,
+        inheritAppName: inheritAppName
+      },
+      run: [$(this).parents('[data-hook-type]').data('hook-type')]
     };
-    newHooks[hookName].run = [$(this).parents('[data-hook-type]').data('hook-type')];
+
+    newHooks.push(newHook);
     onErrorActionProviders[id].then(function(result) {
-      newHooks[hookName].settings.onErrorAction = result && result.data ? result.data : {};
-      newHooks[hookName].script = compile(newHooks[hookName].settings);
+      newHook.settings.onErrorAction = result && result.data ? result.data : {};
+      newHook.script = compile(newHook.settings);
     });
   });
 
