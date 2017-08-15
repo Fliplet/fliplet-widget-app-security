@@ -14,7 +14,8 @@
       "jquery-ui",
       "handlebars",
       "bootstrap-select",
-      "codemirror"
+      "codemirror",
+      "lodash"
     ],
     "assets": [
       "css/interface.css",
