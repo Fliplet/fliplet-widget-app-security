@@ -191,6 +191,7 @@ $(document)
   .on('click', '.icon-delete', function() {
     var context;
     var $item = $(this).closest("[data-id], .panel");
+    var id = $item.data('id');
     var deleteConfirmation = confirm("Are you sure you want to delete this rule?");
     if ($item.parents('.panel-group').is('#accordionPage')) {
       context = 'page';
@@ -200,6 +201,7 @@ $(document)
 
     if (deleteConfirmation) {
       $item.remove();
+      delete onErrorActionProviders[id];
 
       if (context === 'page') {
         panelItems = $('#accordionPage .panel').length;
