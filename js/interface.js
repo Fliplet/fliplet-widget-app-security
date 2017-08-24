@@ -173,7 +173,9 @@ function addHookItem(settings, accordionContext, add) {
   });
 
   apps.forEach(function(app) {
-    $hook.find('.selectField select').append('<option data-name="' + app.name + '" value="' + app.id + '">' + app.name + '</option>');
+    if (app.id !== Fliplet.Env.get('appId')) {
+      $hook.find('.selectField select').append('<option data-name="' + app.name + '" value="' + app.id + '">' + app.name + '</option>');
+    }
   });
   $hook.find('.selectField select').removeAttr('disabled');
 
@@ -458,7 +460,7 @@ function compile(hook) {
     }
 
     if (hook.requirement === 'inherit') {
-      return 'inherit:' + inheritAppId;
+      return 'inherit:' + hook.inheritAppId;
     }
 
     var comparison = hook.filterType === 'whitelist' ? '===' : '>';
