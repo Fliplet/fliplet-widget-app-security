@@ -272,16 +272,20 @@ $(document)
         codeEditors[id].refresh();
       }
       $(this).closest('.panel').find('.linkProvider').addClass('hidden');
+      $(this).closest('.panel').find('.protect-app').removeClass('hidden');
     }
 
     if ($(this).val() !== 'custom') {
       $(this).closest('.panel').find('.custom-condition').hide();
       $(this).closest('.panel').find('.linkProvider').removeClass('hidden');
+      $(this).closest('.panel').find('.protect-app').removeClass('hidden');
     }
 
     // If Inherit option
     if ($(this).val() === 'inherit') {
       $(this).closest('.panel').find('.appSelect').removeClass('hidden');
+      $(this).closest('.panel').find('.linkProvider').addClass('hidden');
+      $(this).closest('.panel').find('.protect-app').addClass('hidden');
       $(this).closest('.panel').find('.linkProvider').addClass('hidden');
     }
 
@@ -451,6 +455,10 @@ function compile(hook) {
   if (hook.hookType === 'beforePageView') {
     if (hook.requirement === 'custom') {
       return hook.customCondition;
+    }
+
+    if (hook.requirement === 'inherit') {
+      return 'inherit:' + inheritAppId;
     }
 
     var comparison = hook.filterType === 'whitelist' ? '===' : '>';

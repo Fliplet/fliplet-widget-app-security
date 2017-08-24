@@ -70,58 +70,60 @@
         </div>
       </div>
 
-      <div class="form-group clearfix filter-type">
-        <div class="col-sm-4 control-label">
-          <label for="filterType">How do you want to protect your app?</label>
-        </div>
-        <div class="col-sm-8">
-          <div class="radio radio-icon">
-            <input type="radio" id="blacklist_{{id}}" data-type="filterType" name="filterType_{{id}}" value="blacklist">
-            <label for="blacklist_{{id}}">
-              <span class="check"><i class="fa fa-circle"></i></span> Protect only the following screens...
-            </label>
-          </div>
-          <div class="radio radio-icon">
-            <input type="radio" id="whitelist_{{id}}" data-type="filterType" name="filterType_{{id}}" value="whitelist">
-            <label for="whitelist_{{id}}">
-              <span class="check"><i class="fa fa-circle"></i></span> Protect all your app's screens except the following...
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div class="pages">
-        <div class="form-group clearfix pages-blacklist hidden">
+      <div class="protect-app">
+        <div class="form-group clearfix filter-type">
           <div class="col-sm-4 control-label">
-            <label for="pages">Select the screens you want to protect</label>
+            <label for="filterType">How do you want to protect your app?</label>
           </div>
           <div class="col-sm-8">
-            <select class="selectpicker" multiple>
-              {{#each pages}}
-                <option {{#if selected }} selected {{/if}} value="{{ id }}">{{ title }}</option>
-              {{/each}}
-            </select>
+            <div class="radio radio-icon">
+              <input type="radio" id="blacklist_{{id}}" data-type="filterType" name="filterType_{{id}}" value="blacklist">
+              <label for="blacklist_{{id}}">
+                <span class="check"><i class="fa fa-circle"></i></span> Protect only the following screens...
+              </label>
+            </div>
+            <div class="radio radio-icon">
+              <input type="radio" id="whitelist_{{id}}" data-type="filterType" name="filterType_{{id}}" value="whitelist">
+              <label for="whitelist_{{id}}">
+                <span class="check"><i class="fa fa-circle"></i></span> Protect all your app's screens except the following...
+              </label>
+            </div>
           </div>
         </div>
 
-        <div class="form-group clearfix pages-whitelist hidden">
-          <div class="col-sm-4 control-label">
-            <label for="pages">Select the screens that are the exception</label>
+        <div class="pages">
+          <div class="form-group clearfix pages-blacklist hidden">
+            <div class="col-sm-4 control-label">
+              <label for="pages">Select the screens you want to protect</label>
+            </div>
+            <div class="col-sm-8">
+              <select class="selectpicker" multiple>
+                {{#each pages}}
+                  <option {{#if selected }} selected {{/if}} value="{{ id }}">{{ title }}</option>
+                {{/each}}
+              </select>
+            </div>
           </div>
-          <div class="col-sm-8">
-            <select class="selectpicker" multiple>
-              {{#each pages}}
-                <option {{#if selected }} selected {{/if}} value="{{ id }}">{{ title }}</option>
-              {{/each}}
-            </select>
+
+          <div class="form-group clearfix pages-whitelist hidden">
+            <div class="col-sm-4 control-label">
+              <label for="pages">Select the screens that are the exception</label>
+            </div>
+            <div class="col-sm-8">
+              <select class="selectpicker" multiple>
+                {{#each pages}}
+                  <option {{#if selected }} selected {{/if}} value="{{ id }}">{{ title }}</option>
+                {{/each}}
+              </select>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="form-group clearfix linkProvider">
-        <div class="col-sm-12">
-          <h3><small>If the condition above is not met, the user will be redirected to another screen (please select it below).</small></h3>
-          <div class="onErrorAction"></div>
+        <div class="form-group clearfix linkProvider">
+          <div class="col-sm-12">
+            <h3><small>If the condition above is not met, the user will be redirected to another screen (please select it below).</small></h3>
+            <div class="onErrorAction"></div>
+          </div>
         </div>
       </div>
     </div>
