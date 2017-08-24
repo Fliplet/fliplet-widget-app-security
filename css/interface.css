@@ -2,3 +2,236 @@
   border: 0;
   width: 100%;
 }
+
+.spinner-holder {
+  text-align: center;
+}
+
+.custom-condition {
+  display: none;
+}
+
+.form-horizontal .radio.radio-icon {
+  padding-top: 0;
+}
+
+.tab-content {
+  margin-top: 15px;
+}
+
+.nav-tabs {
+  padding-top: 13px;
+}
+
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:focus,
+.nav-tabs>li.active>a:hover,
+.nav>li>a:focus,
+.nav>li>a:hover {
+  border-bottom-color: #14505E;
+  color: #14505E !important;
+}
+
+.nav-tabs>li>a:hover,
+.nav-tabs>li>a:focus {
+  border-bottom-color: #00ABD1;
+  color: #00ABD1 !important;
+}
+
+.panel-group {
+  -webkit-user-select: none;
+}
+
+.panel {
+  opacity: 1;
+  -webkit-transition: opacity 100ms linear;
+}
+
+.panel.focus {
+  opacity: 0.7;
+}
+
+.panel-group .panel {
+  overflow: hidden;
+}
+
+.panel.focus .fa-trash {
+  opacity: 0 !important;
+  -webkit-transition: opacity 50ms linear;
+}
+
+.panel-heading {
+  position: relative;
+  padding: 0;
+}
+
+.panel-heading:hover {
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+}
+
+.panel-heading h4 {
+  padding: 10px 40px 10px 15px;
+}
+
+.panel-heading .fa-chevron-down,
+.panel-heading .fa-chevron-right {
+  margin-right: 10px;
+}
+
+.panel-title .fa {
+  cursor: pointer;
+}
+
+.panel-heading .icon-delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  color: #E60000;
+  width: 38px;
+  height: 38px;
+  line-height: 38px;
+  text-align: center;
+}
+
+.panel-heading:hover .icon-delete {
+  opacity: 1;
+}
+
+.panel-heading .screen-reorder-handle {
+  display: block;
+  width: 2.4rem;
+  float: left;
+  margin-right: 6px;
+  text-align: center;
+  border-right: 1px solid #999;
+  opacity: 0.7;
+  line-height: 18px;
+}
+
+.panel-collapse {
+  opacity: 0;
+}
+
+.panel-collapse.in {
+  opacity: 1;
+  -webkit-transition: opacity 0.1s linear;
+}
+
+.placeholder {
+  border: 1px solid rgb(0, 171, 210);
+  background-color: #f2f6f7;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.07) 0 1px 1px 0 inset, rgba(0, 171, 210, 0.4) 0 0 6px 0;
+  -moz-box-shadow: rgba(0, 0, 0, 0.07) 0 1px 1px 0 inset, rgba(0, 171, 210, 0.4) 0 0 6px 0;
+  box-shadow: rgba(0, 0, 0, 0.07) 0 1px 1px 0 inset, rgba(0, 171, 210, 0.4) 0 0 6px 0;
+}
+
+.tile {
+  height: 40px;
+}
+
+.panels-empty {
+  text-align: center;
+  margin-bottom: 40px;
+  display: none;
+}
+
+#accordion {
+  display: block;
+}
+
+.controls {
+  opacity: 1;
+  text-align: center;
+}
+
+.controls .btn-link {
+  color: #333;
+}
+
+.controls .expand-items {
+  font-size: 0.9em;
+  display: none;
+}
+
+.controls.not-show {
+  opacity: 0;
+}
+
+.controls-sticky-on .controls {
+  visibility: hidden;
+}
+
+.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+  width: 100%;
+}
+
+.bootstrap-select .btn-default {
+  width: 100%;
+  padding: 0px 12px;
+  background: #fff;
+  border: 1px solid #e4e9eb;
+  border-radius: 6px;
+  font-weight: 400;
+  line-height: 44px;
+  color: #333;
+}
+
+.bootstrap-select.btn-group.show-tick .dropdown-menu li.selected a span.check-mark {
+  color: #00abd1;
+}
+
+.bootstrap-select .bs-caret {
+  position: absolute;
+  background: #00abd1;
+  width: 44px;
+  top: -1px;
+  right: -1px;
+  bottom: -1px;
+  background-color: #00abd1;
+  text-align: center;
+  line-height: 44px;
+  font-size: 18px;
+  color: #FFF;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-left: 1px solid #e4e9eb;
+}
+
+.bootstrap-select.btn-group .dropdown-toggle .caret {
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  margin-top: -22px;
+  right: 0;
+}
+
+.bootstrap-select .bs-caret .caret {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  vertical-align: initial;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+}
+
+.bootstrap-select .bs-caret .caret:before {
+  content: "\f078";
+}
+
+.bootstrap-select .dropdown-toggle:focus {
+  outline: none !important;
+  ;
+}
+
+.CodeMirror {
+  border: 1px solid #e4e9eb;
+  border-radius: 6px;
+  min-height: 65px;
+  height: 150px;
+}

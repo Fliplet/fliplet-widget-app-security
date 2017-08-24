@@ -1,69 +1,49 @@
-<div class="container-fluid">
-  <form class="form-horizontal">
-    <div class="form-group">
-      <div class="col-sm-4 control-label">
-        <label for="sso_logout_url">Rule name</label>
-      </div>
-      <div class="col-sm-8">
-        <input type="text" class="form-control" id="name" placeholder="My SAML2 hook" required/>
-        <h6>A unique identifier name for your rule .</h6>
-      </div>
-    </div>
+<form class="form-horizontal">
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active" id="page-view-control"><a href="#pageView" aria-controls="page-view" role="tab" data-toggle="tab">Page security</a></li>
+    <li role="presentation" id="data-query-control"><a href="#dataSourceQuery" aria-controls="data-query" role="tab" data-toggle="tab">Data source query security</a></li>
+  </ul>
 
-    <div class="form-group clearfix">
-      <div class="col-sm-4 control-label">
-        <label for="filterType">Filter type</label>
-      </div>
-      <div class="col-sm-8">
-        <label for="filterType" class="select-proxy-display">
-          <span class="icon fa fa-chevron-down"></span>
-          <span class="select-value-proxy">Select a type</span>
-          <select id="filterType" data-label="select" class="hidden-select form-control" required>
-            <option value="blacklist">&mdash; Blacklist &mdash;</option>
-            <option value="whitelist">&mdash; Whitelist &mdash;</option>
-          </select>
-        </label>
-      </div>
-    </div>
+  <div class="tab-content">
+    <div role="tabpanel" data-hook-type='beforePageView' class="tab-pane tab-pane-content active" id="pageView">
+      <p>Page security rules will secure specific screens in your app and prevent unauthorised users from viewing them.</p>
+      <div class="panel-group ui-sortable" id="accordionPage"></div>
 
-    <div class="form-group">
-      <div class="col-sm-4 control-label">
-        <label for="pages">Pages</label>
+      <div class="tab-spinner spinner-holder animated">
+        <div class="spinner-overlay">Loading...</div>
+        <p>Loading...</p>
       </div>
-      <div class="col-sm-8" id="pages">
-      </div>
-    </div>
 
-    <div class="form-group clearfix">
-      <div class="col-sm-4 control-label">
-        <label for="requirement">Requirement</label>
+      <div class="panels-empty">
+        <p><strong>Create as many rules as you want</strong><br>Click the button below to get started</p>
       </div>
-      <div class="col-sm-8">
-        <label for="requirement" class="select-proxy-display">
-          <span class="icon fa fa-chevron-down"></span>
-          <span class="select-value-proxy">Select a type</span>
-          <select id="requirement" data-label="select" class="hidden-select form-control" required>
-            <option value="saml2">&mdash; SAML2 &mdash;</option>
-          </select>
-        </label>
-      </div>
-    </div>
 
-    <div class="form-group">
-      <div class="col-sm-4 control-label">
-        <label for="sso_logout_url">Error message</label>
-      </div>
-      <div class="col-sm-8">
-        <input type="text" class="form-control" id="errorMessage" value="{{errrorMessage}}" required/>
-        <h6>An error message to present to the user when the hook is rejecting.</h6>
+      <div class="controls clearfix hidden">
+        <div class="btn-holder">
+          <div class="btn btn-default new-hook-page">Add new rule</div>
+        </div>
+        <div class="btn btn-link expand-items">Expand/Collapse All</div>
       </div>
     </div>
+    <div role="tabpanel" data-hook-type='beforeDataSourceQuery' class="tab-pane tab-pane-content" id="dataSourceQuery">
+      <p>A data query security rule will stop your app presenting information linked to a data source if the user is not validated.</p>
+      <div class="panel-group ui-sortable" id="accordionQuery"></div>
 
-    <div class="form-group clearfix">
-      <div class="col-sm-12">
-        <h3>Action on error</h4>
-        <div id="onErrorAction"></div>
+      <div class="tab-spinner spinner-holder animated">
+        <div class="spinner-overlay">Loading...</div>
+        <p>Loading...</p>
+      </div>
+
+      <div class="panels-empty">
+        <p><strong>Create as many rules as you want</strong><br>Click the button below to get started</p>
+      </div>
+
+      <div class="controls clearfix hidden">
+        <div class="btn-holder">
+          <div class="btn btn-default new-hook-query">Add new rule</div>
+        </div>
+        <div class="btn btn-link expand-items">Expand/Collapse All</div>
       </div>
     </div>
-  </form>
-</div>
+  </div>
+</form>
