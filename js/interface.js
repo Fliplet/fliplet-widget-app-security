@@ -434,13 +434,14 @@ Fliplet.Widget.onSaveRequest(function() {
 
   Fliplet.Widget.all(onErrorActionProvidersArray)
     .then(function() {
-      Fliplet.Widget.save();
       return Fliplet.API.request({
         url: 'v1/apps/' + Fliplet.Env.get('appId'),
         method: 'PUT',
         data: {
           hooks: newHooks
         }
+      }).then(function () {
+        Fliplet.Studio.emit('widget-save-complete');
       });
     });
 
@@ -471,7 +472,7 @@ function compile(hook) {
       ')',
       '{',
       'error = "' + hook.errorMessage + '";',
-      'navigate = ' + (hook.onErrorAction.action ? '"' + hook.onErrorAction.action + '"' : 'null') + ';',
+      'navigate = ' + (hook.onErrorAction.action ? JSON.stringify(_.omit(hook.onErrorAction, ['files', 'options'])) : 'null') + ';',
       '}'
     ].join('');
   }
