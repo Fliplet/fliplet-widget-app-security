@@ -132,6 +132,7 @@ function addHookItem(settings, accordionContext, add) {
     blacklist: settings.filterType === 'blacklist',
     saml2: settings.requirement === 'saml2',
     dataSource: settings.requirement === 'dataSource',
+    flipletLogin: settings.requirement === 'flipletLogin',
     custom: settings.requirement === 'custom',
     inherit: settings.requirement === 'inherit'
   };

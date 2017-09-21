@@ -5,13 +5,13 @@ this["Fliplet"]["Widget"]["Templates"] = this["Fliplet"]["Widget"]["Templates"] 
 this["Fliplet"]["Widget"]["Templates"]["templates.hook"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"name","hash":{},"data":data}) : helper)));
+  return container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"name","hash":{},"data":data}) : helper)));
 },"3":function(container,depth0,helpers,partials,data) {
     return "New Rule";
 },"5":function(container,depth0,helpers,partials,data) {
     return "selected ";
 },"7":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "                  <option "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.selected : depth0),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -23,7 +23,7 @@ this["Fliplet"]["Widget"]["Templates"]["templates.hook"] = Handlebars.template({
 },"8":function(container,depth0,helpers,partials,data) {
     return " selected ";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "<div class=\"panel panel-default accordion"
     + alias4(((helper = (helper = helpers.accordion || (depth0 != null ? depth0.accordion : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"accordion","hash":{},"data":data}) : helper)))
@@ -41,7 +41,9 @@ this["Fliplet"]["Widget"]["Templates"]["templates.hook"] = Handlebars.template({
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.saml2 : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ">Require a valid SAML2 login</option>\n              <option data-name=\"Data Source\" value=\"dataSource\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.dataSource : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ">Require authentication against a data source</option>\n              <option data-name=\"Custom Condition\" value=\"custom\" "
+    + ">Require authentication against a data source</option>\n              <option data-name=\"Fliplet Login\" value=\"flipletLogin\" "
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.flipletLogin : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ">Require authentication against a Fliplet account</option>\n              <option data-name=\"Custom Condition\" value=\"custom\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.custom : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ">I'll write my own condition</option>\n              <option data-name=\"Inherit Condition\" value=\"inherit\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.inherit : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")

@@ -27,6 +27,7 @@
               <option value="">-- Select a type</option>
               <option data-name="SAML2" value="saml2" {{#if saml2}}selected {{/if}}>Require a valid SAML2 login</option>
               <option data-name="Data Source" value="dataSource" {{#if dataSource}}selected {{/if}}>Require authentication against a data source</option>
+              <option data-name="Fliplet Login" value="flipletLogin" {{#if flipletLogin}}selected {{/if}}>Require authentication against a Fliplet account</option>
               <option data-name="Custom Condition" value="custom" {{#if custom}}selected {{/if}}>I'll write my own condition</option>
               <option data-name="Inherit Condition" value="inherit" {{#if inherit}}selected {{/if}}>Inherit condition(s) from another app</option>
             </select>
