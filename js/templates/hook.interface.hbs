@@ -17,18 +17,18 @@
 
       <div class="form-group clearfix requirement">
         <div class="col-sm-4 control-label">
-          <label for="requirement">Select the condition for your rule</label>
+          <label for="requirement">Required security condition</label>
         </div>
         <div class="col-sm-8">
           <label for="requirement" class="select-proxy-display">
             <span class="icon fa fa-chevron-down"></span>
-            <span class="select-value-proxy">-- Select a type</span>
+            <span class="select-value-proxy">-- Select a condition</span>
             <select data-name="requirement" data-label="select" class="hidden-select form-control" required>
-              <option value="">-- Select a type</option>
+              <option value="">-- Select a condition</option>
               <option data-name="SAML2" value="saml2" {{#if saml2}}selected {{/if}}>Require a valid SAML2 login</option>
               <option data-name="Data Source" value="dataSource" {{#if dataSource}}selected {{/if}}>Require authentication against a data source</option>
-              <option data-name="Fliplet Login" value="flipletLogin" {{#if flipletLogin}}selected {{/if}}>Require authentication against a Fliplet account</option>
-              <option data-name="Custom Condition" value="custom" {{#if custom}}selected {{/if}}>I'll write my own condition</option>
+              <option data-name="Fliplet Login" value="flipletLogin" {{#if flipletLogin}}selected {{/if}}>Require a valid Fliplet login</option>
+              <option data-name="Custom Condition" value="custom" {{#if custom}}selected {{/if}}>Write my own condition</option>
               <option data-name="Inherit Condition" value="inherit" {{#if inherit}}selected {{/if}}>Inherit condition(s) from another app</option>
             </select>
           </label>
@@ -108,7 +108,7 @@
 
           <div class="form-group clearfix pages-whitelist hidden">
             <div class="col-sm-4 control-label">
-              <label for="pages">Select the screens that are the exception</label>
+              <label for="pages">Select the screens that do not need security</label>
             </div>
             <div class="col-sm-8">
               <select class="selectpicker" multiple>
@@ -122,7 +122,7 @@
 
         <div class="form-group clearfix linkProvider">
           <div class="col-sm-12">
-            <h3><small>If the condition above is not met, the user will be redirected to another screen (please select it below).</small></h3>
+            <h3><small>If the required condition above is not met, which screen should the user be redirected to?</small></h3>
             <div class="onErrorAction"></div>
           </div>
         </div>
