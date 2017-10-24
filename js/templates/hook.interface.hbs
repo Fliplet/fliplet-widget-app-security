@@ -5,7 +5,7 @@
       <span class="panel-title-text">
         <span class="requirement"></span>
         <span class="textDefault">
-          {{#if name}}{{name}}{{else}}New Rule{{/if}}
+          {{#if name}}{{name}}{{else}}New security rule{{/if}}
         </span>
       </span>
     </h4>
@@ -29,7 +29,7 @@
               <option data-name="Data Source" value="dataSource" {{#if dataSource}}selected {{/if}}>Require authentication against a data source</option>
               <option data-name="Fliplet Login" value="flipletLogin" {{#if flipletLogin}}selected {{/if}}>Require a valid Fliplet login</option>
               <option data-name="Custom Condition" value="custom" {{#if custom}}selected {{/if}}>Write my own condition</option>
-              <option data-name="Inherit Condition" value="inherit" {{#if inherit}}selected {{/if}}>Inherit condition(s) from another app</option>
+              <option data-name="Inherit Condition" value="inherit" {{#if inherit}}selected {{/if}}>Inherit security rules(s) from another app</option>
             </select>
           </label>
         </div>
