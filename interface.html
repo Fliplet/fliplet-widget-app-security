@@ -1,12 +1,12 @@
 <form class="form-horizontal">
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active" id="page-view-control"><a href="#pageView" aria-controls="page-view" role="tab" data-toggle="tab">Page security</a></li>
+    <li role="presentation" class="active" id="page-view-control"><a href="#pageView" aria-controls="page-view" role="tab" data-toggle="tab">Screen security</a></li>
     <li role="presentation" id="data-query-control"><a href="#dataSourceQuery" aria-controls="data-query" role="tab" data-toggle="tab">Data source query security</a></li>
   </ul>
 
   <div class="tab-content">
     <div role="tabpanel" data-hook-type='beforePageView' class="tab-pane tab-pane-content active" id="pageView">
-      <p>Page security rules will secure specific screens in your app and prevent unauthorised users from viewing them.</p>
+      <p>Screen security rules will secure specific screens in your app and prevent unauthorized users from viewing them.</p>
       <div class="panel-group ui-sortable" id="accordionPage"></div>
 
       <div class="tab-spinner spinner-holder animated">
@@ -26,7 +26,7 @@
       </div>
     </div>
     <div role="tabpanel" data-hook-type='beforeDataSourceQuery' class="tab-pane tab-pane-content" id="dataSourceQuery">
-      <p>A data query security rule will stop your app presenting information linked to a data source if the user is not validated.</p>
+      <p>Data source query security rules will stop your app accessing data from to a data source if the user is not validated.</p>
       <div class="panel-group ui-sortable" id="accordionQuery"></div>
 
       <div class="tab-spinner spinner-holder animated">
