@@ -41,7 +41,7 @@ this["Fliplet"]["Widget"]["Templates"]["templates.hook"] = Handlebars.template({
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.saml2 : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ">Require a valid SAML2 login</option>\n              <option data-name=\"Data Source\" value=\"dataSource\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.dataSource : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ">Require authentication against a data source</option>\n              <option data-name=\"Fliplet Login\" value=\"flipletLogin\" "
+    + ">Require Email/SMS/Data Source verification</option>\n              <option data-name=\"Fliplet Login\" value=\"flipletLogin\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.flipletLogin : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ">Require a valid Fliplet login</option>\n              <option data-name=\"Custom Condition\" value=\"custom\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.custom : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
