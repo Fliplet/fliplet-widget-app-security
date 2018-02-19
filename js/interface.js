@@ -285,6 +285,7 @@ $(document)
     }
 
     // If Inherit option
+    $(this).closest('.panel').find('.appSelect').addClass('hidden');
     if ($(this).val() === 'inherit') {
       $(this).closest('.panel').find('.appSelect').removeClass('hidden');
       $(this).closest('.panel').find('.linkProvider').addClass('hidden');
