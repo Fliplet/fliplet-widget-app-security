@@ -488,7 +488,7 @@ function compile(hook) {
       'if (' + '!session || !session.server.passports || !session.server.passports.' + hook.requirement + ')',
       '{',
       'error = true;',
-      'message = "Secured query";',
+      'errorMessage = "Secured query";',
       '}'
     ].join('');
   }
