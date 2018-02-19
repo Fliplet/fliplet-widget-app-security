@@ -473,7 +473,7 @@ function compile(hook) {
       hook.customCondition ? ' && ' + hook.customCondition : '',
       ')',
       '{',
-      'error = "' + hook.errorMessage + '";',
+      'error = true;',
       'navigate = ' + (hook.onErrorAction.action ? JSON.stringify(_.omit(hook.onErrorAction, ['files', 'options'])) : 'null') + ';',
       '}'
     ].join('');
@@ -487,7 +487,8 @@ function compile(hook) {
     return [
       'if (' + '!session || !session.server.passports || !session.server.passports.' + hook.requirement + ')',
       '{',
-      'error = "' + hook.errorMessage || 'Secured query' + '";',
+      'error = true;',
+      'message = "Secured query";',
       '}'
     ].join('');
   }
