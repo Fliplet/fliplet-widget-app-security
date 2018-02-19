@@ -285,6 +285,7 @@ $(document)
     }
 
     // If Inherit option
+    $(this).closest('.panel').find('.appSelect').addClass('hidden');
     if ($(this).val() === 'inherit') {
       $(this).closest('.panel').find('.appSelect').removeClass('hidden');
       $(this).closest('.panel').find('.linkProvider').addClass('hidden');
@@ -472,7 +473,7 @@ function compile(hook) {
       hook.customCondition ? ' && ' + hook.customCondition : '',
       ')',
       '{',
-      'error = "' + hook.errorMessage + '";',
+      'error = true;',
       'navigate = ' + (hook.onErrorAction.action ? JSON.stringify(_.omit(hook.onErrorAction, ['files', 'options'])) : 'null') + ';',
       '}'
     ].join('');
@@ -486,7 +487,8 @@ function compile(hook) {
     return [
       'if (' + '!session || !session.server.passports || !session.server.passports.' + hook.requirement + ')',
       '{',
-      'error = "' + hook.errorMessage || 'Secured query' + '";',
+      'error = true;',
+      'errorMessage = "Secured query";',
       '}'
     ].join('');
   }
