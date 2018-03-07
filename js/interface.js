@@ -466,7 +466,7 @@ function compile(hook) {
       return 'inherit:' + hook.inheritAppId;
     }
 
-    var redirectPageId = parseInt(hook.onErrorAction.page);
+    var redirectPageId = parseInt(hook.onErrorAction.page, 10);
     if (hook.filterType === 'whitelist') {
       comparison = '===';
       if (redirectPageId & hook.pages.indexOf(redirectPageId) === -1) {
