@@ -466,7 +466,24 @@ function compile(hook) {
       return 'inherit:' + hook.inheritAppId;
     }
 
-    var comparison = hook.filterType === 'whitelist' ? '===' : '>';
+    var redirectPageId = parseInt(hook.onErrorAction.page, 10);
+    if (hook.filterType === 'whitelist') {
+      comparison = '===';
+      if (redirectPageId & hook.pages.indexOf(redirectPageId) === -1) {
+        // Add the redirect page to the list of unprotected pages
+        hook.pages.push(redirectPageId);
+      }
+    }
+
+    if (hook.filterType === 'blacklist') {
+      comparison = '>';
+      var indexOfRedirect = hook.pages.indexOf(redirectPageId);
+      if (redirectPageId & indexOfRedirect > -1) {
+        // Remove the redirect page to the list of protected pages
+        hook.pages.splice(indexOfRedirect, 1);
+      }
+    }
+
     return [
       'if ([' + hook.pages + '].indexOf(page.id) ' + comparison + ' -1 && ',
       '(!session || !session.server.passports || !session.server.passports.' + hook.requirement + ')',
