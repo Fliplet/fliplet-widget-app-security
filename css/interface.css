@@ -48,7 +48,7 @@
 }
 
 .panel-group .panel {
-  overflow: hidden;
+  overflow: visible;
 }
 
 .panel.focus .fa-trash {
