@@ -489,7 +489,7 @@ function compile(hook) {
       comparison = '>';
       var indexOfRedirect = hook.pages.indexOf(redirectPageId);
       if (redirectPageId & indexOfRedirect > -1) {
-        // Remove the redirect page to the list of protected pages
+        // Remove the redirect page from the list of protected pages
         hook.pages.splice(indexOfRedirect, 1);
       }
     }
