@@ -85,6 +85,10 @@ Fliplet().then(function() {
       pages = values[1];
       apps = values[2];
 
+      if (Fliplet.Env.get('development')) {
+        hooks = Fliplet.Widget.getData().hooks || [];
+      }
+
       hooks.forEach(function(hook) {
         hook.settings = hook.settings || {};
         hook.settings.name = hook.settings.name || '';
@@ -436,6 +440,12 @@ Fliplet.Widget.onSaveRequest(function() {
 
   Fliplet.Widget.all(onErrorActionProvidersArray)
     .then(function() {
+      if (Fliplet.Env.get('development')) {
+        return Fliplet.Widget.save({ hooks: newHooks }).then(function () {
+          return Fliplet.Widget.complete();
+        });
+      }
+
       return Fliplet.API.request({
         url: 'v1/apps/' + Fliplet.Env.get('appId'),
         method: 'PUT',
