@@ -48,9 +48,6 @@ function checkPanels(context) {
   Fliplet.Widget.autosize();
 }
 
-checkPanels('page');
-checkPanels('query');
-
 // SORTING PANELS
 $('.panel-group').sortable({
   handle: ".panel-heading",
@@ -111,6 +108,9 @@ Fliplet().then(function() {
           return;
         }
       });
+
+      checkPanels('page');
+      checkPanels('query');
 
       Fliplet.Widget.autosize();
     });
