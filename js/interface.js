@@ -279,7 +279,7 @@ $(document)
   .on('shown.bs.collapse hidden.bs.collapse', '.panel-collapse', function() {
     Fliplet.Widget.autosize();
   })
-  .on('shown.bs.tab', 'a[data-toggle="tab"]', function(e) {
+  .on('shown.bs.tab', 'a[data-toggle="tab"]', function() {
     Fliplet.Widget.autosize();
   })
   .on('change', '[data-name="requirement"]', function() {
