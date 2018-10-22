@@ -227,14 +227,26 @@ $(document)
     var context;
     var $item = $(this).closest("[data-id], .panel");
     var id = $item.data('id');
-    var deleteConfirmation = confirm("Are you sure you want to delete this rule?");
-    if ($item.parents('.panel-group').is('#accordionPage')) {
-      context = 'page';
-    } else if ($item.parents('.panel-group').is('#accordionQuery')) {
-      context = 'query';
-    }
+    Fliplet.Modal.confirm({
+      title: 'Delete security rule',
+      message: 'Are you sure you want to delete this security rule?',
+      buttons: {
+        confirm: {
+          label: 'Delete rule',
+          className: 'btn-danger'
+        }
+      }
+    }).then(function (confirmed) {
+      if (!confirmed) {
+        return;
+      }
 
-    if (deleteConfirmation) {
+      if ($item.parents('.panel-group').is('#accordionPage')) {
+        context = 'page';
+      } else if ($item.parents('.panel-group').is('#accordionQuery')) {
+        context = 'query';
+      }
+
       $item.remove();
       delete onErrorActionProviders[id];
 
@@ -245,7 +257,7 @@ $(document)
         panelItemsTwo = $('#accordionQuery .panel').length;
         checkPanels('query');
       }
-    }
+    });
   })
   .on('change', '[data-name="requirement"]', function() {
     var value = $(this).val();
