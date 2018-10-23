@@ -48,9 +48,6 @@ function checkPanels(context) {
   Fliplet.Widget.autosize();
 }
 
-checkPanels('page');
-checkPanels('query');
-
 // SORTING PANELS
 $('.panel-group').sortable({
   handle: ".panel-heading",
@@ -111,6 +108,9 @@ Fliplet().then(function() {
           return;
         }
       });
+
+      checkPanels('page');
+      checkPanels('query');
 
       Fliplet.Widget.autosize();
     });
@@ -227,14 +227,26 @@ $(document)
     var context;
     var $item = $(this).closest("[data-id], .panel");
     var id = $item.data('id');
-    var deleteConfirmation = confirm("Are you sure you want to delete this rule?");
-    if ($item.parents('.panel-group').is('#accordionPage')) {
-      context = 'page';
-    } else if ($item.parents('.panel-group').is('#accordionQuery')) {
-      context = 'query';
-    }
+    Fliplet.Modal.confirm({
+      title: 'Delete security rule',
+      message: 'Are you sure you want to delete this security rule?',
+      buttons: {
+        confirm: {
+          label: 'Delete rule',
+          className: 'btn-danger'
+        }
+      }
+    }).then(function (confirmed) {
+      if (!confirmed) {
+        return;
+      }
 
-    if (deleteConfirmation) {
+      if ($item.parents('.panel-group').is('#accordionPage')) {
+        context = 'page';
+      } else if ($item.parents('.panel-group').is('#accordionQuery')) {
+        context = 'query';
+      }
+
       $item.remove();
       delete onErrorActionProviders[id];
 
@@ -245,7 +257,7 @@ $(document)
         panelItemsTwo = $('#accordionQuery .panel').length;
         checkPanels('query');
       }
-    }
+    });
   })
   .on('change', '[data-name="requirement"]', function() {
     var value = $(this).val();
@@ -267,41 +279,40 @@ $(document)
   .on('shown.bs.collapse hidden.bs.collapse', '.panel-collapse', function() {
     Fliplet.Widget.autosize();
   })
-  .on('shown.bs.tab', 'a[data-toggle="tab"]', function(e) {
+  .on('shown.bs.tab', 'a[data-toggle="tab"]', function() {
     Fliplet.Widget.autosize();
   })
   .on('change', '[data-name="requirement"]', function() {
-    var id = $(this).closest('.panel').find('.custom-condition').data('panel-id');
+    var $target = $(this);
+    var value = $target.val();
+    var $panel = $target.closest('.panel');
+    var id = $panel.find('.custom-condition').data('panel-id');
 
-    if ($(this).val() === 'custom') {
-      $(this).closest('.panel').find('.custom-condition').show();
+    if (value === 'custom') {
+      $panel.find('.custom-condition').show();
       if (codeEditors[id]) {
         codeEditors[id].refresh();
       }
-      $(this).closest('.panel').find('.linkProvider').addClass('hidden');
-      $(this).closest('.panel').find('.protect-app').removeClass('hidden');
+      $panel.find('.linkProvider').addClass('hidden');
+      $panel.find('.protect-app').removeClass('hidden');
     }
 
-    if ($(this).val() !== 'custom') {
-      $(this).closest('.panel').find('.custom-condition').hide();
-      $(this).closest('.panel').find('.linkProvider').removeClass('hidden');
-      $(this).closest('.panel').find('.protect-app').removeClass('hidden');
+    if (value !== 'custom') {
+      $panel.find('.custom-condition').hide();
+      $panel.find('.linkProvider, .protect-app').removeClass('hidden');
     }
 
     // If Inherit option
-    $(this).closest('.panel').find('.appSelect').addClass('hidden');
-    if ($(this).val() === 'inherit') {
-      $(this).closest('.panel').find('.appSelect').removeClass('hidden');
-      $(this).closest('.panel').find('.linkProvider').addClass('hidden');
-      $(this).closest('.panel').find('.protect-app').addClass('hidden');
-      $(this).closest('.panel').find('.linkProvider').addClass('hidden');
+    $panel.find('.appSelect').addClass('hidden');
+    if (value === 'inherit') {
+      $panel.find('.appSelect').removeClass('hidden');
+      $panel.find('.linkProvider, .protect-app, .linkProvider').addClass('hidden');
     }
 
     // no option selected
-    if ($(this).val() === '') {
-      $(this).closest('.panel').find('.appSelect').addClass('hidden');
-      $(this).closest('.panel').find('.linkProvider').addClass('hidden');
-      $(this).closest('.panel').find('.custom-condition').hide();
+    if (value === '') {
+      $panel.find('.appSelect, .linkProvider').addClass('hidden');
+      $panel.find('.custom-condition').hide();
     }
   })
   .on('change', '[data-type="filterType"]', function() {
