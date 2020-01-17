@@ -490,7 +490,7 @@ function compile(hook) {
     var redirectPageId = parseInt(hook.onErrorAction.page, 10);
     if (hook.filterType === 'whitelist') {
       comparison = '===';
-      if (redirectPageId & hook.pages.indexOf(redirectPageId) === -1) {
+      if (redirectPageId && hook.pages.indexOf(redirectPageId) === -1) {
         // Add the redirect page to the list of unprotected pages
         hook.pages.push(redirectPageId);
       }
@@ -499,7 +499,7 @@ function compile(hook) {
     if (hook.filterType === 'blacklist') {
       comparison = '>';
       var indexOfRedirect = hook.pages.indexOf(redirectPageId);
-      if (redirectPageId & indexOfRedirect > -1) {
+      if (redirectPageId && indexOfRedirect > -1) {
         // Remove the redirect page from the list of protected pages
         hook.pages.splice(indexOfRedirect, 1);
       }
