@@ -294,7 +294,7 @@ $(document)
         codeEditors[id].refresh();
       }
       $panel.find('.linkProvider').addClass('hidden');
-      $panel.find('.protect-app').removeClass('hidden');
+      $panel.find('.protect-app').addClass('hidden');
     }
 
     if (value !== 'custom') {
