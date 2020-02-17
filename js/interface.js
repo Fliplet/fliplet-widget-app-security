@@ -50,8 +50,8 @@ function checkPanels(context) {
 
 // SORTING PANELS
 $('.panel-group').sortable({
-  handle: ".panel-heading",
-  cancel: ".icon-delete",
+  handle: '.panel-heading',
+  cancel: '.icon-delete',
   tolerance: 'pointer',
   revert: 150,
   placeholder: 'panel panel-default placeholder tile',
@@ -66,17 +66,17 @@ $('.panel-group').sortable({
     ui.item.removeClass('focus');
     $('.panel').not(ui.item).removeClass('faded');
   },
-  sort: function(event, ui) {
+  sort: function() {
     $('.panel-group').sortable('refresh');
   }
 });
 
 Fliplet().then(function() {
   Promise.all([
-      Fliplet.App.Hooks.get(),
-      Fliplet.Pages.get(),
-      Fliplet.Apps.get()
-    ])
+    Fliplet.App.Hooks.get(),
+    Fliplet.Pages.get(),
+    Fliplet.Apps.get()
+  ])
     .then(function(values) {
       hooks = values[0];
       pages = values[1];
@@ -114,7 +114,6 @@ Fliplet().then(function() {
 
       Fliplet.Widget.autosize();
     });
-
 });
 
 function addHookItem(settings, accordionContext, add) {
@@ -170,7 +169,7 @@ function addHookItem(settings, accordionContext, add) {
   });
 
   codeEditors[hookTemplateId] = CodeMirror.fromTextArea(document.getElementById('codeEditor' + hookTemplateId), {
-    height: "150px",
+    height: '150px',
     mode: 'htmlmixed',
     lineNumbers: true,
     autoRefresh: true,
@@ -187,9 +186,9 @@ function addHookItem(settings, accordionContext, add) {
   $hook.find('.hidden-select').change();
   $hook.find('.selectpicker').selectpicker('render');
   if (settings.filterType) {
-    $hook.find('input[value="' + settings.filterType + '"]').prop("checked", true).trigger('change');
+    $hook.find('input[value="' + settings.filterType + '"]').prop('checked', true).trigger('change');
   } else {
-    $hook.find('input[value="blacklist"]').prop("checked", true).trigger('change');
+    $hook.find('input[value="blacklist"]').prop('checked', true).trigger('change');
   }
 
   if (add) {
@@ -225,7 +224,7 @@ function updateSelectText(el) {
 $(document)
   .on('click', '.icon-delete', function() {
     var context;
-    var $item = $(this).closest("[data-id], .panel");
+    var $item = $(this).closest('[data-id], .panel');
     var id = $item.data('id');
     Fliplet.Modal.confirm({
       title: 'Delete security rule',
@@ -236,7 +235,7 @@ $(document)
           className: 'btn-danger'
         }
       }
-    }).then(function (confirmed) {
+    }).then(function(confirmed) {
       if (!confirmed) {
         return;
       }
@@ -335,7 +334,7 @@ $(document)
     // Update accordionCollapsed if all panels are collapsed/expanded
     if (!$panelCollapse.length) {
       accordionCollapsed = true;
-    } else if ($panelCollapse.length == $(this).parents('#pageView').find('.panel-collapse').length) {
+    } else if ($panelCollapse.length === $(this).parents('#pageView').find('.panel-collapse').length) {
       accordionCollapsed = false;
     }
 
@@ -350,7 +349,7 @@ $(document)
     // Update accordionCollapsed if all panels are collapsed/expanded
     if (!$panelCollapse.length) {
       accordionTwoCollapsed = true;
-    } else if ($panelCollapse.length == $(this).parents('#dataSourceQuery').find('.panel-collapse.in').length) {
+    } else if ($panelCollapse.length === $(this).parents('#dataSourceQuery').find('.panel-collapse.in').length) {
       accordionTwoCollapsed = false;
     }
 
@@ -412,12 +411,12 @@ Fliplet.Widget.onSaveRequest(function() {
     // Get selected pages
     var pages = [];
     if (filterType === 'blacklist') {
-      $.each($(this).find(".pages-blacklist .selectpicker option:selected"), function() {
+      $.each($(this).find('.pages-blacklist .selectpicker option:selected'), function() {
         pages.push(Number($(this).val()));
       });
     }
     if (filterType === 'whitelist') {
-      $.each($(this).find(".pages-whitelist .selectpicker option:selected"), function() {
+      $.each($(this).find('.pages-whitelist .selectpicker option:selected'), function() {
         pages.push(Number($(this).val()));
       });
     }
@@ -452,7 +451,7 @@ Fliplet.Widget.onSaveRequest(function() {
   Fliplet.Widget.all(onErrorActionProvidersArray)
     .then(function() {
       if (Fliplet.Env.get('development')) {
-        return Fliplet.Widget.save({ hooks: newHooks }).then(function () {
+        return Fliplet.Widget.save({ hooks: newHooks }).then(function() {
           return Fliplet.Widget.complete();
         });
       }
@@ -463,7 +462,7 @@ Fliplet.Widget.onSaveRequest(function() {
         data: {
           hooks: newHooks
         }
-      }).then(function () {
+      }).then(function() {
         Fliplet.Studio.emit('widget-save-complete');
       });
     });
@@ -479,6 +478,8 @@ Fliplet.Widget.onSaveRequest(function() {
  */
 function compile(hook) {
   if (hook.hookType === 'beforePageView') {
+    var comparison;
+
     if (hook.requirement === 'custom') {
       return hook.customCondition;
     }
