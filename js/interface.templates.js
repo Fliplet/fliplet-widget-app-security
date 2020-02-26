@@ -59,13 +59,17 @@ this["Fliplet"]["Widget"]["Templates"]["templates.hook"] = Handlebars.template({
     + alias4(((helper = (helper = helpers.customCondition || (depth0 != null ? depth0.customCondition : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"customCondition","hash":{},"data":data}) : helper)))
     + "</textarea>\n        </div>\n      </div>\n\n      <div class=\"protect-app\">\n        <div class=\"form-group clearfix filter-type\">\n          <div class=\"col-sm-4 control-label\">\n            <label for=\"filterType\">How do you want to protect your app?</label>\n          </div>\n          <div class=\"col-sm-8\">\n            <div class=\"radio radio-icon\">\n              <input type=\"radio\" id=\"blacklist_"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\" data-type=\"filterType\" name=\"filterType_"
+    + "\" data-type=\"filterType\" data-name=\"filterType_"
+    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
+    + "\" name=\"filterType_"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\" value=\"blacklist\">\n              <label for=\"blacklist_"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\">\n                <span class=\"check\"><i class=\"fa fa-circle\"></i></span> Protect only the following screens...\n              </label>\n            </div>\n            <div class=\"radio radio-icon\">\n              <input type=\"radio\" id=\"whitelist_"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\" data-type=\"filterType\" name=\"filterType_"
+    + "\" data-type=\"filterType\" data-name=\"filterType_"
+    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
+    + "\" name=\"filterType_"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\" value=\"whitelist\">\n              <label for=\"whitelist_"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))

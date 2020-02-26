@@ -316,16 +316,18 @@ $(document)
   })
   .on('change', '[data-type="filterType"]', function() {
     var value = $(this).val();
+    var filterName = this.name;
+    var $dropdown = $('[data-name="' + filterName + '"]').parents('.protect-app');
 
     if (value === 'blacklist') {
-      $('.pages-blacklist').removeClass('hidden');
-      $('.pages-whitelist').addClass('hidden');
+      $dropdown.find('.pages-blacklist').removeClass('hidden');
+      $dropdown.find('.pages-whitelist').addClass('hidden');
       return;
     }
 
     if (value === 'whitelist') {
-      $('.pages-whitelist').removeClass('hidden');
-      $('.pages-blacklist').addClass('hidden');
+      $dropdown.find('.pages-blacklist').addClass('hidden');
+      $dropdown.find('.pages-whitelist').removeClass('hidden');
       return;
     }
   })
