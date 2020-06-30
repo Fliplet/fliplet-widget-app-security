@@ -468,7 +468,7 @@ Fliplet.Widget.onSaveRequest(function() {
         Fliplet.Studio.emit('widget-save-complete');
       }).catch(function (err) {
         Fliplet.Modal.alert({
-          message: '<strong>One of your security rules have a JavaScript error:</strong><br><br><code>' + Fliplet.parseError(err) + '</code>'
+          message: 'One of your security rules has a JavaScript error:<br><br><code>' + Fliplet.parseError(err) + '</code>'
         });
       });
     });
