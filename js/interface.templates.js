@@ -11,9 +11,9 @@ this["Fliplet"]["Widget"]["Templates"]["templates.hook"] = Handlebars.template({
 },"5":function(container,depth0,helpers,partials,data) {
     return "selected ";
 },"7":function(container,depth0,helpers,partials,data) {
-    return "(Available on Private Plus and above)";
-},"9":function(container,depth0,helpers,partials,data) {
     return "(Available on Private and above)";
+},"9":function(container,depth0,helpers,partials,data) {
+    return "(Available on Private Plus and above)";
 },"11":function(container,depth0,helpers,partials,data) {
     return "(Available on Enterprise only)";
 },"13":function(container,depth0,helpers,partials,data) {
@@ -43,18 +43,18 @@ this["Fliplet"]["Widget"]["Templates"]["templates.hook"] = Handlebars.template({
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.name : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
     + "\r\n        </span>\r\n      </span>\r\n    </h4>\r\n    <a href=\"#\"><span class=\"icon-delete fa fa-trash\"></span></a>\r\n  </div>\r\n\r\n  <div id=\"collapse-"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\" class=\"panel-collapse collapse\">\r\n    <div class=\"panel-body\">\r\n\r\n      <div class=\"form-group clearfix requirement\">\r\n        <div class=\"col-sm-4 control-label\">\r\n          <label for=\"requirement\">Required security condition</label>\r\n        </div>\r\n        <div class=\"col-sm-8\">\r\n          <label for=\"requirement\" class=\"select-proxy-display\">\r\n            <span class=\"icon fa fa-chevron-down\"></span>\r\n            <span class=\"select-value-proxy\">-- Select a condition</span>\r\n            <select data-name=\"requirement\" data-label=\"select\" class=\"hidden-select form-control\" required>\r\n              <option value=\"\">-- Select a condition</option>\r\n              <option data-name=\"SAML2\" value=\"saml2\" "
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.saml2 : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ">Require a valid SAML2 login "
-    + ((stack1 = helpers.unless.call(alias1,((stack1 = (depth0 != null ? depth0.appSecurityFeatures : depth0)) != null ? stack1.saml2 : stack1),{"name":"unless","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "</option>\r\n              <option data-name=\"Data Source\" value=\"dataSource\" "
+    + "\" class=\"panel-collapse collapse\">\r\n    <div class=\"panel-body\">\r\n\r\n      <div class=\"form-group clearfix requirement\">\r\n        <div class=\"col-sm-4 control-label\">\r\n          <label for=\"requirement\">Required security condition</label>\r\n        </div>\r\n        <div class=\"col-sm-8\">\r\n          <label for=\"requirement\" class=\"select-proxy-display\">\r\n            <span class=\"icon fa fa-chevron-down\"></span>\r\n            <span class=\"select-value-proxy\">-- Select a condition</span>\r\n            <select data-name=\"requirement\" data-label=\"select\" class=\"hidden-select form-control\" required>\r\n              <option value=\"\">-- Select a condition</option>\r\n              <option data-name=\"Data Source\" value=\"dataSource\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.dataSource : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ">Require Email/SMS/Data Source verification</option>\r\n              <option data-name=\"Fliplet Login\" value=\"flipletLogin\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.flipletLogin : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ">Require a valid Fliplet login</option>\r\n              <option data-name=\"Custom Condition\" value=\"custom\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.custom : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ">Write my own condition "
-    + ((stack1 = helpers.unless.call(alias1,((stack1 = (depth0 != null ? depth0.appSecurityFeatures : depth0)) != null ? stack1.custom : stack1),{"name":"unless","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.unless.call(alias1,((stack1 = (depth0 != null ? depth0.appSecurityFeatures : depth0)) != null ? stack1.custom : stack1),{"name":"unless","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "</option>\r\n              <option data-name=\"SAML2\" value=\"saml2\" "
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.saml2 : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ">Require a valid SAML2 login "
+    + ((stack1 = helpers.unless.call(alias1,((stack1 = (depth0 != null ? depth0.appSecurityFeatures : depth0)) != null ? stack1.saml2 : stack1),{"name":"unless","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</option>\r\n              <option data-name=\"Inherit Condition\" value=\"inherit\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.inherit : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ">Inherit security rules(s) from another app "
