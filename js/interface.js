@@ -1,3 +1,6 @@
+var widgetId = Fliplet.Widget.getDefaultId();
+var widgetData = Fliplet.Widget.getData(widgetId) || {};
+var appSecurityFeatures = widgetData.appSecurityFeatures;
 var $accordionContainer = $('#accordionPage');
 var $accordionTwoContainer = $('#accordionQuery');
 var hookTemplateId = 0; // Just a counter to have a simple unique id for each hook when rendering the template.
@@ -137,7 +140,8 @@ function addHookItem(settings, accordionContext, add) {
     dataSource: settings.requirement === 'dataSource',
     flipletLogin: settings.requirement === 'flipletLogin',
     custom: settings.requirement === 'custom',
-    inherit: settings.requirement === 'inherit'
+    inherit: settings.requirement === 'inherit',
+    appSecurityFeatures: appSecurityFeatures
   };
   var context = $.extend({}, settings, extraContext);
   var $hook = $(Fliplet.Widget.Templates['templates.hook'](context));
@@ -220,6 +224,21 @@ function updateSelectText(el) {
   $(el).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
 }
 
+function disableForm($panel) {
+  $panel.find('.linkProvider').addClass('hidden');
+  $panel.find('select:not([data-name="requirement"]), input, textarea')
+    .addClass('disabled')
+    .prop('disabled', true);
+  $panel.find('.callout-upgrade').removeClass('hidden');
+}
+
+function enableForm($panel) {
+  $panel.find('select:not([data-name="requirement"]), input, textarea')
+    .removeClass('disabled')
+    .prop('disabled', false);
+  $panel.find('.callout-upgrade').addClass('hidden');
+}
+
 // Listeners
 $(document)
   .on('click', '.icon-delete', function() {
@@ -286,6 +305,8 @@ $(document)
     var value = $target.val();
     var $panel = $target.closest('.panel');
     var id = $panel.find('.custom-condition').data('panel-id');
+    var selectedFeatureIsDisabled = value && appSecurityFeatures.hasOwnProperty(value)
+      && !appSecurityFeatures[value];
 
     if (value === 'custom') {
       $panel.find('.custom-condition').show();
@@ -313,6 +334,15 @@ $(document)
       $panel.find('.appSelect, .linkProvider').addClass('hidden');
       $panel.find('.custom-condition').hide();
     }
+
+    // Check if feature is available
+    if (selectedFeatureIsDisabled) {
+      disableForm($panel);
+    } else {
+      enableForm($panel);
+    }
+
+    Fliplet.Widget.autosize();
   })
   .on('change', '[data-type="filterType"]', function() {
     var value = $(this).val();
@@ -364,6 +394,28 @@ $(document)
   .on('click', '[data-change-app]', function() {
     $(this).parents('.changeText').addClass('hidden');
     $(this).parents('.changeText').siblings('.selectField').removeClass('hidden');
+  })
+  .on('click', '.upgrade-plan', function () {
+    Fliplet.Studio.emit('close-overlay', {
+      name: 'app-settings'
+    });
+
+    Fliplet.Studio.emit('overlay', {
+      name: 'app-settings',
+      options: {
+        size: 'large',
+        title: 'App Settings',
+        appId: Fliplet.Env.get('appId'),
+        section: 'appBilling',
+        helpLink: 'https://help.fliplet.com/app-settings/'
+      }
+    });
+
+    Fliplet.Studio.emit('track-event', {
+      category: 'app_billing',
+      action: 'open',
+      context: 'app_security'
+    });
   });
 
 function expandAccordion() {
@@ -404,6 +456,8 @@ Fliplet.Widget.onSaveRequest(function() {
 
     var filterType = $(this).find('input[name="filterType_' + id + '"]:checked').val();
     var requirement = $(this).find('[data-name="requirement"]').val();
+    var selectedFeatureIsDisabled = requirement && appSecurityFeatures.hasOwnProperty(requirement)
+      && !appSecurityFeatures[requirement];
 
     var editorId = $(this).find('[data-name="customCondition"]').data('editor-id');
     var customCondition = codeEditors[editorId].getValue();
@@ -438,6 +492,11 @@ Fliplet.Widget.onSaveRequest(function() {
       },
       run: [$(this).parents('[data-hook-type]').data('hook-type')]
     };
+
+    // Don't add rule/hook to save
+    if (selectedFeatureIsDisabled) {
+      return;
+    }
 
     newHooks.push(newHook);
     onErrorActionProviders[id].then(function(result) {
