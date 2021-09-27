@@ -395,7 +395,7 @@ $(document)
     $(this).parents('.changeText').addClass('hidden');
     $(this).parents('.changeText').siblings('.selectField').removeClass('hidden');
   })
-  .on('click', '.upgrade-plan', function () {
+  .on('click', '.upgrade-plan', function() {
     Fliplet.Studio.emit('close-overlay', {
       name: 'app-settings'
     });
