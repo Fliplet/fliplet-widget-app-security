@@ -397,24 +397,11 @@ $(document)
     $(this).parents('.changeText').siblings('.selectField').removeClass('hidden');
   })
   .on('click', '.upgrade-plan', function() {
-    Fliplet.Studio.emit('close-overlay', {
-      name: 'app-settings'
-    });
-
-    Fliplet.Studio.emit('overlay', {
-      name: 'app-settings',
-      options: {
-        size: 'large',
-        title: 'App Settings',
-        appId: Fliplet.Env.get('appId'),
-        section: 'appBilling',
-        helpLink: 'https://help.fliplet.com/app-settings/'
-      }
-    });
+    Fliplet.Studio.emit('switch-app-settings-tab', 'appBilling');
 
     Fliplet.Studio.emit('track-event', {
       category: 'app_billing',
-      action: 'open',
+      action: 'switch_tab',
       context: 'app_security'
     });
   });
