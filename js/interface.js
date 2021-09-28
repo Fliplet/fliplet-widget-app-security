@@ -306,7 +306,7 @@ $(document)
     var value = $target.val();
     var $panel = $target.closest('.panel');
     var id = $panel.find('.custom-condition').data('panel-id');
-    var selectedFeatureIsDisabled = value && appSecurityFeatures.hasOwnProperty(value)
+    var selectedFeatureDisabled = value && appSecurityFeatures.hasOwnProperty(value)
       && !appSecurityFeatures[value];
 
     if (value === 'custom') {
@@ -337,7 +337,7 @@ $(document)
     }
 
     // Check if feature is available
-    if (selectedFeatureIsDisabled) {
+    if (selectedFeatureDisabled) {
       disableForm($panel);
     } else {
       enableForm($panel);
@@ -457,7 +457,7 @@ Fliplet.Widget.onSaveRequest(function() {
 
     var filterType = $(this).find('input[name="filterType_' + id + '"]:checked').val();
     var requirement = $(this).find('[data-name="requirement"]').val();
-    var selectedFeatureIsDisabled = requirement && appSecurityFeatures.hasOwnProperty(requirement)
+    var selectedFeatureDisabled = requirement && appSecurityFeatures.hasOwnProperty(requirement)
       && !appSecurityFeatures[requirement];
 
     var editorId = $(this).find('[data-name="customCondition"]').data('editor-id');
@@ -495,7 +495,7 @@ Fliplet.Widget.onSaveRequest(function() {
     };
 
     // Don't add rule/hook to save
-    if (selectedFeatureIsDisabled) {
+    if (selectedFeatureDisabled) {
       return;
     }
 
