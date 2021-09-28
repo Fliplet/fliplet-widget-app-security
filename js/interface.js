@@ -1,6 +1,7 @@
 var widgetId = Fliplet.Widget.getDefaultId();
 var widgetData = Fliplet.Widget.getData(widgetId) || {};
-var appSecurityFeatures = widgetData.appSecurityFeatures;
+var appSecurityFeatures = widgetData.appFeatures.hasOwnProperty('appSecurity')
+  && widgetData.appFeatures.appSecurity;
 var $accordionContainer = $('#accordionPage');
 var $accordionTwoContainer = $('#accordionQuery');
 var hookTemplateId = 0; // Just a counter to have a simple unique id for each hook when rendering the template.
