@@ -11,11 +11,11 @@ this["Fliplet"]["Widget"]["Templates"]["templates.hook"] = Handlebars.template({
 },"5":function(container,depth0,helpers,partials,data) {
     return "selected ";
 },"7":function(container,depth0,helpers,partials,data) {
-    return "(Available on Private and above)";
+    return "(Available on Private plan and above)";
 },"9":function(container,depth0,helpers,partials,data) {
-    return "(Available on Private Plus and above)";
+    return "(Available on Enterprise Silver plan and above)";
 },"11":function(container,depth0,helpers,partials,data) {
-    return "(Available on Enterprise only)";
+    return "(Available on Enterprise plans only)";
 },"13":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 

@@ -27,9 +27,9 @@
               <option value="">-- Select a condition</option>
               <option data-name="Data Source" value="dataSource" {{#if dataSource}}selected {{/if}}>Require Email/SMS/Data Source verification</option>
               <option data-name="Fliplet Login" value="flipletLogin" {{#if flipletLogin}}selected {{/if}}>Require a valid Fliplet login</option>
-              <option data-name="Custom Condition" value="custom" {{#if custom}}selected {{/if}}>Write my own condition {{#unless  appSecurityFeatures.custom}}(Available on Private and above){{/unless }}</option>
-              <option data-name="SAML2" value="saml2" {{#if saml2}}selected {{/if}}>Require a valid SAML2 login {{#unless  appSecurityFeatures.saml2}}(Available on Private Plus and above){{/unless }}</option>
-              <option data-name="Inherit Condition" value="inherit" {{#if inherit}}selected {{/if}}>Inherit security rule(s) from another app {{#unless  appSecurityFeatures.inherit}}(Available on Enterprise only){{/unless }}</option>
+              <option data-name="Custom Condition" value="custom" {{#if custom}}selected {{/if}}>Write my own condition {{#unless  appSecurityFeatures.custom}}(Available on Private plan and above){{/unless }}</option>
+              <option data-name="SAML2" value="saml2" {{#if saml2}}selected {{/if}}>Require a valid SAML2 login {{#unless  appSecurityFeatures.saml2}}(Available on Enterprise Silver plan and above){{/unless }}</option>
+              <option data-name="Inherit Condition" value="inherit" {{#if inherit}}selected {{/if}}>Inherit security rule(s) from another app {{#unless  appSecurityFeatures.inherit}}(Available on Enterprise plans only){{/unless }}</option>
             </select>
           </label>
         </div>
