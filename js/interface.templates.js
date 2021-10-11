@@ -13,7 +13,7 @@ this["Fliplet"]["Widget"]["Templates"]["templates.hook"] = Handlebars.template({
 },"7":function(container,depth0,helpers,partials,data) {
     return "(Available on Private and above)";
 },"9":function(container,depth0,helpers,partials,data) {
-    return "(Available on Private Plus and above)";
+    return "(Available on Enterprise Silver plan and above)";
 },"11":function(container,depth0,helpers,partials,data) {
     return "(Available on Enterprise only)";
 },"13":function(container,depth0,helpers,partials,data) {
