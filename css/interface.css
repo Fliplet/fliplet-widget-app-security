@@ -3,6 +3,10 @@
   width: 100%;
 }
 
+body{
+  overflow-y: hidden;
+}
+
 .spinner-holder {
   text-align: center;
 }
