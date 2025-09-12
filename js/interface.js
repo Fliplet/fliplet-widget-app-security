@@ -561,7 +561,6 @@ function compile(hook) {
 
     return [
       'if ([' + hook.pages + '].indexOf(page.id) ' + comparison + ' -1 && ',
-      'session.client.source !== \'studio\' && ',
       '(!session || !session.server.passports || !session.server.passports.' + hook.requirement + ')',
       hook.customCondition ? ' && ' + hook.customCondition : '',
       ')',
