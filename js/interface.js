@@ -204,7 +204,7 @@ function addHookItem(settings, accordionContext, add) {
     $hook.find('.appSelect.spinner-holder').removeClass('animated');
     $hook.find('.selectField').removeClass('hidden');
   } else {
-    var hasAccessToApp = _.find(apps, function(app) {
+    var hasAccessToApp = Fliplet.Utils.find(apps, function(app) {
       return app.id === parseInt(settings.inheritAppId, 10);
     });
 
@@ -566,7 +566,7 @@ function compile(hook) {
       ')',
       '{',
       'error = true;',
-      'navigate = ' + (hook.onErrorAction.action ? JSON.stringify(_.omit(hook.onErrorAction, ['files', 'options'])) : 'null') + ';',
+      'navigate = ' + (hook.onErrorAction.action ? JSON.stringify(Fliplet.Utils.omit(hook.onErrorAction, ['files', 'options'])) : 'null') + ';',
       '}'
     ].join('');
   }
