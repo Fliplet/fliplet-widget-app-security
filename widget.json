@@ -11,11 +11,11 @@
     "dependencies": [
       "fliplet-core",
       "fliplet-studio-ui",
+      "fliplet-utils",
       "jquery-ui",
       "handlebars",
       "bootstrap-select",
-      "codemirror",
-      "lodash"
+      "codemirror"
     ],
     "assets": [
       "css/interface.css",
