@@ -5,7 +5,7 @@
   "icon": "img/icon.png",
   "tags": ["type:appComponent"],
   "provider_only": true,
-  "references": [],
+  "references": ["onErrorAction.page:page"],
   "html_tag": "div",
   "interface": {
     "dependencies": [
